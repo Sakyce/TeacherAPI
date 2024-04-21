@@ -63,13 +63,18 @@ namespace TeacherExtension.Foxo
             audios.Add("boing", ObjectCreators.CreateSoundObject(Clip("boing.wav"), "* Boing! *", SoundType.Effect, Color.white));
             audios.Add("ding", ObjectCreators.CreateSoundObject(Clip("ding.wav"), "* Ding! *", SoundType.Effect, Color.white));
             audios.Add("school", NoSubtitle(Clip("school2.wav"), SoundType.Music));
-            audios.Add("hellothere", ObjectCreators.CreateSoundObject(Clip("hellothere.wav"), "Hello there! Welcome to my Fun Schoolhouse.", SoundType.Effect, Color.white));
+            audios.Add("hellothere", ObjectCreators.CreateSoundObject(Clip("hellothere.wav"), "Hello there! Welcome to my Fun Schoolhouse.", SoundType.Voice, Color.white));
             audios.Add("slap", ObjectCreators.CreateSoundObject(Clip("slap.wav"), "* Slap! *", SoundType.Effect, Color.white));
             audios.Add("slap2", ObjectCreators.CreateSoundObject(Clip("slap2.wav"), "...", SoundType.Effect, Color.white));
             audios.Add("scare", NoSubtitle(Clip("scare.wav"), SoundType.Effect));
-            audios.Add("scream", ObjectCreators.CreateSoundObject(Clip("scream.wav"), "micheal p scream", SoundType.Effect, Color.white));
+            audios.Add("scream", ObjectCreators.CreateSoundObject(Clip("scream.wav"), "micheal p scream", SoundType.Voice, Color.white));
             audios.Add("wrath", NoSubtitle(Clip("wrath.wav"), SoundType.Music));
             audios.Add("fear", NoSubtitle(Clip("fear.wav"), SoundType.Effect));
+
+            audios.Add("praise", new SoundObject[] {
+                ObjectCreators.CreateSoundObject(Clip("praise1.wav"), "Great job, that's great!", SoundType.Voice, Color.white),
+                ObjectCreators.CreateSoundObject(Clip("praise2.wav"), "I think you are smarter than me!", SoundType.Voice, Color.white),
+            });
         }
         public override void Initialize()
         {
@@ -257,19 +262,24 @@ namespace TeacherExtension.Foxo
     {
         protected float delayTimer;
         public Foxo_Chase(Foxo foxo) : base(foxo) { }
-        public override void Enter()
-        {
-            base.Enter();
-            foxo.animator.SetDefaultAnimation("SlapIdle", 1f);
-            delayTimer = foxo.Delay;
-            foxo.ResetSlapDistance();
-        }
         public override void OnStateTriggerStay(Collider other)
         {
             if (foxo.IsTouchingPlayer(other))
             {
                 foxo.CaughtPlayer(foxo.target);
             }
+        }
+        public override void GoodMathMachineAnswer()
+        {
+            base.GoodMathMachineAnswer();
+            foxo.behaviorStateMachine.ChangeState(new Foxo_Praise(foxo, this));
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            foxo.animator.SetDefaultAnimation("SlapIdle", 1f);
+            delayTimer = foxo.Delay;
+            foxo.ResetSlapDistance();
         }
         public override void Update()
         {
@@ -303,6 +313,29 @@ namespace TeacherExtension.Foxo
             }
         }
         protected override void ActivateSlapAnimation() => foxo.SlapNormal();
+    }
+    public class Foxo_Praise : Foxo_StateBase
+    {
+        public TeacherState previousState;
+        private float time;
+
+        public Foxo_Praise(Foxo foxo, TeacherState previousState) : base(foxo) {
+            this.previousState = previousState;
+            time = 4f;
+        }
+        public override void Enter()
+        {
+            base.Enter();
+            foxo.audMan.PlayRandomAudio(Foxo.audios.Get<SoundObject[]>("praise"));
+            foxo.animator.SetDefaultAnimation("Happy", 1f);
+            foxo.animator.Play("Happy", 1f);
+        }
+        public override void Update()
+        {
+            base.Update();
+            time -= Time.deltaTime * npc.TimeScale;
+            if (time <= 0) foxo.behaviorStateMachine.ChangeState(previousState);
+        }
     }
 
     public class Foxo_WrathHappy : Foxo_StateBase
