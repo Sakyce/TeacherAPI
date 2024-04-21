@@ -17,6 +17,10 @@
 			https://nuget.samboy.dev/v3/index.json
 		</RestoreAdditionalProjectSources>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>Sakyce.TeacherAPI</PackageId>
+		<Title>TeacherAPI for Baldi's Basics Plus</Title>
+		<Version>0.0.2</Version>
 	</PropertyGroup>
 	
     <!-- Post-build event for Debug configuration -->

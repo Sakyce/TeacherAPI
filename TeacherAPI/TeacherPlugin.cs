@@ -13,7 +13,7 @@ using BepInEx.Bootstrap;
 
 namespace TeacherAPI
 {
-    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "0.0.0.1")]
+    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "0.0.2")]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi", DependencyFlags.HardDependency)]
     [BepInDependency("mtm101.rulerp.baldiplus.endlessfloors", DependencyFlags.SoftDependency)]
     public class TeacherPlugin : BaseUnityPlugin
