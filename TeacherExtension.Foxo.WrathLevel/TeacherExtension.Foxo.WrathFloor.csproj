@@ -52,7 +52,6 @@
 
 	<!-- Teacher API -->
 	<ItemGroup>
-		<ProjectReference Include="..\TeacherExtension.Foxo.WrathLevel\TeacherExtension.Foxo.WrathFloor.csproj" />
 		<ProjectReference Include="..\TeacherExtension.Foxo\TeacherExtension.Foxo.csproj" />
 	</ItemGroup>
 
