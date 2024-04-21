@@ -24,6 +24,10 @@ namespace TeacherAPI.utils
             return textures.Select(x => AssetLoader.SpriteFromTexture2D(x, pixelsPerUnit)).ToArray();
         }
 
+        /// <summary>
+        /// Used internally for debugging purposes, dont use it in production.
+        /// </summary>
+        /// <param></param>
         public static void Print<T>(this IEnumerable<T> array, string arrayName)
         {
             Debug.Log("Array " + arrayName + " {");
@@ -33,6 +37,11 @@ namespace TeacherAPI.utils
             }
             Debug.Log("}");
         }
+
+        /// <summary>
+        /// Used internally for debugging purposes, dont use it in production.
+        /// </summary>
+        /// <param></param>
         public static void Print<K, V>(this Dictionary<K, V> dict, string arrayName)
         {
             Debug.Log("Dictionary " + arrayName + " {");
@@ -42,6 +51,11 @@ namespace TeacherAPI.utils
             }
             Debug.Log("}");
         }
+
+        /// <summary>
+        /// Used internally for debugging purposes, dont use it in production.
+        /// </summary>
+        /// <param name="thing"></param>
         public static void Print(this object thing)
         {
             Debug.Log(thing ?? "null");
