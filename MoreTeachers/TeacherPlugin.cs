@@ -13,7 +13,7 @@ using BepInEx.Bootstrap;
 
 namespace TeacherAPI
 {
-    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "1.0.0.0")]
+    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "0.0.0.1")]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi", DependencyFlags.HardDependency)]
     [BepInDependency("mtm101.rulerp.baldiplus.endlessfloors", DependencyFlags.SoftDependency)]
     public class TeacherPlugin : BaseUnityPlugin
@@ -74,14 +74,9 @@ namespace TeacherAPI
             return baldis.First();
         }
 
-        /// <summary>
-        /// Used for your patches.
-        /// </summary>
-        /// <typeparam name=""></typeparam>
-        /// <returns></returns>
-        public static bool IsTeacherPresent<T>() where T : Teacher
+        public static T[] GetTeachersOfType<T>() where T : Teacher
         {
-            return (from teacher in Instance.spawnedTeachers where teacher.GetType().Equals(typeof(T)) select teacher).Count() > 0;
+            return (from teacher in Instance.spawnedTeachers where teacher.GetType().Equals(typeof(T)) select (T)teacher).ToArray();
         }
 
         /// <summary>
