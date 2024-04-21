@@ -13,7 +13,7 @@ using BepInEx.Bootstrap;
 
 namespace TeacherAPI
 {
-    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "1.0.4.2")]
+    [BepInPlugin("sakyce.baldiplus.teacherapi", "Teacher API", "1.0.0.0")]
     [BepInDependency("mtm101.rulerp.bbplus.baldidevapi", DependencyFlags.HardDependency)]
     [BepInDependency("mtm101.rulerp.baldiplus.endlessfloors", DependencyFlags.SoftDependency)]
     public class TeacherPlugin : BaseUnityPlugin
@@ -98,8 +98,6 @@ namespace TeacherAPI
 
         /// <summary>
         /// Load textures from a pattern, used to easily load animations.
-        /// <para>
-        /// 
         /// </summary>
         /// <param name="mod"></param>
         /// <param name="pattern">A pattern that will go through String.Format(pattern, i)</param>
