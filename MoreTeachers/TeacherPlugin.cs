@@ -35,7 +35,7 @@ namespace TeacherAPI
 
             GeneratorManagement.Register(this, GenerationModType.Base, EditGenerator);
         }
-        public static Baldi ConvertTeacherToBaldi(Baldi teacher)
+        internal static Baldi ConvertTeacherToBaldi(Baldi teacher)
         {
             return teacher;
         }
@@ -60,7 +60,7 @@ namespace TeacherAPI
                 originalBaldiPerFloor.Add(floorObject, GetPotentialBaldi(floorObject));
             } catch (ArgumentException) {}
         }
-        public Baldi GetPotentialBaldi(LevelObject floorObject)
+        internal Baldi GetPotentialBaldi(LevelObject floorObject)
         {
             var baldis = (from x in floorObject.potentialBaldis
                           where x.selection.GetType().Equals(typeof(Baldi))
@@ -75,10 +75,20 @@ namespace TeacherAPI
         }
 
         /// <summary>
+        /// Used for your patches.
+        /// </summary>
+        /// <typeparam name=""></typeparam>
+        /// <returns></returns>
+        public static bool IsTeacherPresent<T>() where T : Teacher
+        {
+            return (from teacher in Instance.spawnedTeachers where teacher.GetType().Equals(typeof(T)) select teacher).Count() > 0;
+        }
+
+        /// <summary>
         /// Returns true if Infinite Floors/Endless Floors is loaded.
         /// </summary>
         /// <returns></returns>
-        public bool IsEndlessFloorsLoaded()
+        public static bool IsEndlessFloorsLoaded()
         {
             return (
                 from x in Chainloader.PluginInfos 
