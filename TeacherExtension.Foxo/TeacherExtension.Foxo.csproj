@@ -59,6 +59,6 @@
 
 	<!-- Teacher API -->
 	<ItemGroup>
-	  <ProjectReference Include="..\MoreTeachers\TeacherAPI.csproj" />
+	  <ProjectReference Include="..\TeacherAPI\TeacherAPI.csproj" />
 	</ItemGroup>
 </Project>
