@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherExtension.Foxo", "Fo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherExtension.Foxo.WrathFloor", "TeacherExtension.Foxo.WrathLevel\TeacherExtension.Foxo.WrathFloor.csproj", "{391C0273-F6C8-41E7-B6AF-812FCEACABE5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E9067505-CFCE-4ACB-B00E-EA8654B6550A}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
