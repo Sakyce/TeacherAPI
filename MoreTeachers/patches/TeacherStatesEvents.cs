@@ -1,5 +1,4 @@
 ﻿using HarmonyLib;
-using UnityEngine;
 
 namespace TeacherAPI.patches
 {
@@ -27,20 +26,15 @@ namespace TeacherAPI.patches
     {
         internal static void Postfix()
         {
-            Debug.Log("Post fix called OnNoteBookCollectedPath");
-            if (TeacherPlugin.Instance.spawnedTeachers.Count > 0)
+            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
             {
-                // TeacherAPI.Instance.spawnedTeachers.Print("Spawned Teachers");
-                foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
-                {
-                    teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.NotebookCollected());
-                }
+                teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.NotebookCollected());
             }
         }
     }
 
     [HarmonyPatch(typeof(MainGameManager), nameof(MainGameManager.AllNotebooks))]
-    internal class AllNotebooksCollected
+    internal class OnAllNotebooksCollected
     {
         internal static void Postfix()
         {
@@ -51,6 +45,17 @@ namespace TeacherAPI.patches
                 {
                     teacher.OnAllNotebooksCollected();
                 }
+            }
+        }
+    }
+    [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.PleaseBaldi))]
+    internal class OnGoodMathMachineAnswer
+    {
+        internal static void Prefix()
+        {
+            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
+            {
+                teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.GoodMathMachineAnswer());
             }
         }
     }
