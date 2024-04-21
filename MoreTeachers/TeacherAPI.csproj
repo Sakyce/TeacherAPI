@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+		<!-- Path to baldi plugins -->
+		<PluginGamePath>C:\Program Files (x86)\Steam\steamapps\common\Baldi's Basics Plus\BepInEx\plugins\</PluginGamePath>
+
+		<!-- Path to the dll references -->
+		<LibPath>..\Dependencies\</LibPath>
+
+		<!-- Additional packages sources -->
+		<RestoreAdditionalProjectSources>
+			https://api.nuget.org/v3/index.json;
+			https://nuget.bepinex.dev/v3/index.json;
+			https://nuget.samboy.dev/v3/index.json
+		</RestoreAdditionalProjectSources>
+	</PropertyGroup>
+	
+    <!-- Post-build event for Debug configuration -->
+    <Target Name="PostBuildEventDebug" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Debug'">
+	    <Message Text="Debug post-build event running..." Importance="high" />
+	    <Exec Command="echo F|xcopy /Y &quot;$(MSBuildProjectDirectory)\$(OutDir)$(AssemblyName).dll&quot; &quot;$(PluginGamePath)$(AssemblyName)\$(AssemblyName).dll&quot;" />
+		<Exec Command="echo F|xcopy /Y &quot;$(MSBuildProjectDirectory)\$(OutDir)$(AssemblyName).pdb&quot; &quot;$(PluginGamePath)$(AssemblyName)\$(AssemblyName).pdb&quot;" />
+	</Target>
+
+    <!-- Post-build event for Release configuration -->
+    <Target Name="PostBuildEventRelease" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+		<Message Text="Release post-build event running..." Importance="high" />
+	    <Exec Command="echo F|xcopy /Y &quot;$(MSBuildProjectDirectory)\$(OutDir)$(AssemblyName).dll&quot; &quot;$(PluginGamePath)$(AssemblyName)\$(AssemblyName).dll&quot;" />
+		<Exec Command="echo F|xcopy /Y &quot;$(MSBuildProjectDirectory)\$(OutDir)$(AssemblyName).pdb&quot; &quot;$(PluginGamePath)$(AssemblyName)\$(AssemblyName).pdb&quot;" />
+	</Target>
+    
+	<ItemGroup>
+		<PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
+		<PackageReference Include="BepInEx.Core" Version="5.*" />
+		<PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
+		<PackageReference Include="UnityEngine.Modules" Version="2020.3.38" IncludeAssets="compile" />
+    </ItemGroup>
+	
+	<ItemGroup>
+		<Reference Include="Assembly-CSharp">
+			<HintPath>$(LibPath)Assembly-CSharp-publicized.dll</HintPath>
+		</Reference>
+		<Reference Include="MTM101BaldAPI">
+			<HintPath>$(LibPath)MTM101BaldAPI.dll</HintPath>
+		</Reference>
+		<Reference Include="Unity.TextMeshPro">
+			<HintPath>$(LibPath)Unity.TextMeshPro.dll</HintPath>
+		</Reference>
+		<Reference Include="UnityEngine.UI">
+			<HintPath>$(LibPath)UnityEngine.UI.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,201 @@
+﻿using HarmonyLib;
+using MTM101BaldAPI;
+using System;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
+
+namespace TeacherAPI
+{
+    public class Teacher : Baldi
+    {
+        
+        /// <summary>
+        /// Small offset added to the camera during Jumpscare.
+        /// </summary>
+        protected Vector3 caughtOffset = Vector3.zero;
+        
+        // Overrides
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            // Cancel state machine of bladder
+            behaviorStateMachine.ChangeState(new TeacherState(this));
+            behaviorStateMachine.ChangeNavigationState(new NavigationState_DoNothing(this, 0));
+
+            var baseBaldi = TeacherPlugin.Instance.originalBaldiPerFloor[Singleton<BaseGameManager>.Instance.levelObject];
+            print($"Using {baseBaldi.name} as base Baldi.");
+            slapCurve = baseBaldi.slapCurve;
+            speedCurve = baseBaldi.speedCurve;
+
+            baseSpeed = baseBaldi.baseSpeed;
+            baseAnger = baseBaldi.baseAnger;
+
+            speedMultiplier = baseBaldi.speedMultiplier;
+            appleTime = baseBaldi.appleTime;
+
+            TeacherPlugin.Instance.spawnedTeachers.Add(this);
+        }
+        public override void Despawn()
+        {
+            base.Despawn();
+            TeacherPlugin.Instance.spawnedTeachers.Remove(this);
+        }
+        
+        public override void CaughtPlayer(PlayerManager player)
+        {
+            try { base.CaughtPlayer(player); } catch (Exception e)
+            {
+                MTM101BaldiDevAPI.CauseCrash(TeacherPlugin.Instance.Info, e);
+            }
+            Singleton<CoreGameManager>.Instance.GetCamera(0).offestPos += caughtOffset;
+        }
+
+        // Virtuals
+        public virtual void OnAllNotebooksCollected()
+        {
+            
+        }
+
+        // Ruler related stuff
+        protected virtual void OnRulerBroken()
+        {
+
+        }
+        protected virtual void OnRulerRestored()
+        {
+
+        }
+        public override void Slap()
+        {
+            this.slapTotal = 0f;
+            this.slapDistance = this.nextSlapDistance;
+            this.nextSlapDistance = 0f;
+            this.navigator.SetSpeed(this.slapDistance / (this.Delay * this.MovementPortion));
+            if (breakRuler)
+            {
+                OnRulerBroken();
+                breakRuler = false;
+                return;
+            }
+            if (restoreRuler)
+            {
+                OnRulerRestored();
+                restoreRuler = false;
+                return;
+            }
+        }
+
+        // Methods to customize Teacher
+        /// <summary>
+        /// Replace w
+        /// </summary>
+        /// <typeparam name="RandomEvent"></typeparam>
+        /// <param name="text"></param>
+        public void ReplaceEventText<RandomEvent>(string text) where RandomEvent : global::RandomEvent
+        {
+            var events = ec.gameObject.GetComponentsInChildren<RandomEvent>();
+            foreach (var randomEvent in events)
+            {
+                randomEvent.eventDescKey = text;
+            }
+
+#if DEBUG
+            // For manually triggered random events
+            var eventsInResources = Resources.FindObjectsOfTypeAll<RandomEvent>();
+            foreach (var randomEvent in eventsInResources)
+            {
+                randomEvent.eventDescKey = text;
+                Debug.LogWarning("Changed event key in Resources, this will need to be reset by a script. (DEBUG BUILD)");
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Check if the teacher is touching the player.
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool IsTouchingPlayer(Collider other)
+        {
+            if (other.CompareTag("Player"))
+            {
+                looker.Raycast(other.transform, Vector3.Magnitude(transform.position - other.transform.position), out bool targetSighted);
+                if (targetSighted)
+                {
+                    PlayerManager plr = other.GetComponent<PlayerManager>();
+                    if (!plr.invincible)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Easily add a sound to the loseSounds of Teacher
+        /// When the player is Caught, it will choose one randomly defined by the weight.
+        /// You can also define loseSounds directly if you prefer not using this method.
+        /// Either way, a loseSound must be defined.
+        /// </summary>
+        /// <param name="snd"></param>
+        /// <param name="weight"></param>
+        public void AddLoseSound(SoundObject snd, int weight)
+        {
+            loseSounds = loseSounds.AddItem(new WeightedSoundObject() { selection = snd , weight = weight }).ToArray();
+        }
+
+        /// <summary>
+        /// Starts the game fr, calling ActivateSpoopMode during Free Run will despawn your teacher!
+        /// Can only be called once per level no matter how much teacher there are.
+        /// </summary>
+        public void ActivateSpoopMode()
+        {
+            if (TeacherPlugin.Instance.SpoopModeEnabled)
+            {
+                if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free) 
+                    Despawn();
+                return;
+            }
+            
+            // For which who have spawned the custom teacher after Baldi
+            var happyBaldi = ec.GetComponentInChildren<HappyBaldi>();
+            if (happyBaldi) happyBaldi.sprite.enabled = false;
+
+            TeacherPlugin.Instance.SpoopModeEnabled = true;
+            Singleton<MusicManager>.Instance.StopMidi();
+            Singleton<BaseGameManager>.Instance.BeginSpoopMode();
+            ec.SpawnNPCs();
+            if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Main)
+            {
+                // Teacher is already in HappyBaldi position, do nothing.
+            } else if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free)
+            {
+                Despawn();
+            }
+            ec.StartEventTimers();
+        }
+        public void ReplaceMusic(SoundObject snd)
+        {
+            StartCoroutine(ReplaceMusicDelay(snd));
+        }
+        public void ReplaceMusic()
+        {
+            StartCoroutine(ReplaceMusicDelay());
+        }
+        private IEnumerator ReplaceMusicDelay(SoundObject snd=null)
+        {
+            // Because the midi isn't playing immediatlely obviously very ugly hack pls help me
+            Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Volume = 0;
+            yield return new WaitForSeconds(0.05f);
+            Singleton<MusicManager>.Instance.StopMidi();
+            ec.audMan.FlushQueue(true);
+            if (snd) ec.audMan.PlaySingle(snd);
+            yield return new WaitForSeconds(0.25f);
+            Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Volume = 1;
+            yield break;
+        }
+    }
+}
