@@ -113,7 +113,7 @@ namespace TeacherExtension.Foxo
         internal void Awake()
         {
             // For safety, only edit the SceneObjects when Infinite Floors is not loaded.
-            if (TeacherPlugin.Instance.IsEndlessFloorsLoaded())
+            if (TeacherPlugin.IsEndlessFloorsLoaded())
             {
                 LoadingEvents.RegisterOnAssetsLoaded(AddWrathLevel, false);
             }
