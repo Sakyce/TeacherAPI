@@ -17,7 +17,7 @@ namespace TeacherAPI.patches
                 where x.IsTeacher() && ((Teacher)x).disableNpcs
                 select (Teacher)x
             );
-            charactersThatDisablesSpawn.Print("Characters that disable NPC spawn");
+            charactersThatDisablesSpawn.Print("Characters that disable NPC spawn", TeacherPlugin.Log);
             if (charactersThatDisablesSpawn.Count() > 0)
             {
                 return false;

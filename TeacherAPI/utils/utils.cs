@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using HarmonyLib;
 using MTM101BaldAPI.AssetTools;
 using System;
@@ -28,28 +29,28 @@ namespace TeacherAPI.utils
         /// Used internally for debugging purposes, dont use it in production.
         /// </summary>
         /// <param></param>
-        public static void Print<T>(this IEnumerable<T> array, string arrayName)
+        public static void Print<T>(this IEnumerable<T> array, string arrayName, ManualLogSource logger)
         {
-            Debug.Log("Array " + arrayName + " {");
+            logger.LogInfo("Array " + arrayName + " {");
             foreach (var item in array)
             {
-                Debug.Log("    " + item.ToString());
+                logger.LogInfo("    " + item.ToString());
             }
-            Debug.Log("}");
+            logger.LogInfo("}");
         }
 
         /// <summary>
         /// Used internally for debugging purposes, dont use it in production.
         /// </summary>
         /// <param></param>
-        public static void Print<K, V>(this Dictionary<K, V> dict, string arrayName)
+        public static void Print<K, V>(this Dictionary<K, V> dict, string arrayName, ManualLogSource logger)
         {
-            Debug.Log("Dictionary " + arrayName + " {");
+            logger.LogInfo("Dictionary " + arrayName + " {");
             foreach (var item in dict)
             {
-                Debug.Log("    " + item.Key.ToString() + " : " + item.Value.ToString());
+                logger.LogInfo("    " + item.Key.ToString() + " : " + item.Value.ToString());
             }
-            Debug.Log("}");
+            logger.LogInfo("}");
         }
 
         /// <summary>

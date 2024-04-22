@@ -21,10 +21,8 @@ namespace TeacherAPI.patches
                 {
                     if (npc.IsTeacher())
                     {
-                        Debug.Log("issue start");
                         var fakeBaldi = TeacherPlugin.ConvertTeacherToBaldi((Baldi)npc);
                         __result = fakeBaldi;
-                        fakeBaldi.name.Print(); // Will actually print something
                         break;
                     }
                 }
@@ -60,7 +58,7 @@ namespace TeacherAPI.patches
             var happyBaldi = __instance.Ec.gameObject.GetComponentInChildren<HappyBaldi>();
 
             var level = Singleton<BaseGameManager>.Instance.levelObject;
-            (from x in level.potentialBaldis select $"{x.selection.name} (weight: {x.weight})").Print($"Potential Baldis of {level.name}");
+            (from x in level.potentialBaldis select $"{x.selection.name} (weight: {x.weight})").Print($"Potential Baldis of {level.name}", TeacherPlugin.Log);
             TeacherPlugin.Instance.currentBaldi = TeacherPlugin.Instance.GetPotentialBaldi(level);
             TeacherPlugin.Instance.spawnedTeachers.Clear();
             TeacherPlugin.Instance.SpoopModeEnabled = false;
@@ -77,7 +75,7 @@ namespace TeacherAPI.patches
                     __instance.Ec.npcSpawnTile = __instance.Ec.npcSpawnTile.Where((c, ix) => ix != i).ToArray();
                 };
             }
-            TeacherPlugin.Instance.spawnedTeachers.Print("Spawned Teachers");
+            TeacherPlugin.Instance.spawnedTeachers.Print("Spawned Teachers", TeacherPlugin.Log);
 
             if (customTeacherFound)
             {

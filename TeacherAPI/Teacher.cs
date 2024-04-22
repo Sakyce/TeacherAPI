@@ -30,7 +30,7 @@ namespace TeacherAPI
             behaviorStateMachine.ChangeNavigationState(new NavigationState_DoNothing(this, 0));
 
             var baseBaldi = TeacherPlugin.Instance.originalBaldiPerFloor[Singleton<BaseGameManager>.Instance.levelObject];
-            print($"Using {baseBaldi.name} as base Baldi.");
+            TeacherPlugin.Log.LogInfo($"Using {baseBaldi.name} as base Baldi.");
             slapCurve = baseBaldi.slapCurve;
             speedCurve = baseBaldi.speedCurve;
 

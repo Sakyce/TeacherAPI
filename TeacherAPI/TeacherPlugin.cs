@@ -10,6 +10,7 @@ using System.Linq;
 using UnityEngine;
 using static BepInEx.BepInDependency;
 using BepInEx.Bootstrap;
+using BepInEx.Logging;
 
 namespace TeacherAPI
 {
@@ -27,6 +28,7 @@ namespace TeacherAPI
         public Baldi currentBaldi;
 
         public static AssetManager assetManager = new AssetManager();
+        public static ManualLogSource Log {get => Instance.Logger;}
 
         internal void Awake()
         {
@@ -68,7 +70,7 @@ namespace TeacherAPI
 
             if (baldis.Length > 1)
             {
-                (from baldi in baldis select baldi.name).Print("Baldis");
+                (from baldi in baldis select baldi.name).Print("Baldis", TeacherPlugin.Log);
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("Multiple Baldis found in the level!"));
             }
             return baldis.First();
