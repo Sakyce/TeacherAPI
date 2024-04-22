@@ -38,10 +38,9 @@
 		<PackageReference Include="BepInEx.Core" Version="5.*" />
 		<PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
 		<PackageReference Include="UnityEngine.Modules" Version="2020.3.38" IncludeAssets="compile" />
-		<PackageReference Include="Sakyce.TeacherAPI" Version="0.*" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\TeacherExtension.NullTeacher\TeacherExtension.NullTeacher.csproj" />
+
+		<ProjectReference Include="..\TeacherAPI\TeacherAPI.csproj" />
+		<ProjectReference Include="..\TeacherExtension.NullTeacher\TeacherExtension.NullTeacher.csproj" />
 	</ItemGroup>
 
 	<!-- Baldi dlls -->
