@@ -62,7 +62,7 @@ namespace TeacherAPI.utils
         }
     }
 
-    internal class SimpleEnumerator : IEnumerable
+    public class SimpleEnumerator : IEnumerable
     {
         public IEnumerator enumerator;
         public Action prefixAction = () => { };
