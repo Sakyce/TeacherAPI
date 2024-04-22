@@ -11,7 +11,7 @@ namespace TeacherAPI
     /// <summary>
     /// Note sure if it triggers issues with wide screens
     /// </summary>
-    internal class CustomBaldicator : MonoBehaviour
+    public class CustomBaldicator : MonoBehaviour
     {
         private bool hidden = false;
         private CustomImageAnimator animator;
@@ -69,7 +69,5 @@ namespace TeacherAPI
                 transform.position = Vector3.Lerp(EndingPosition, StartingPosition, i);
             }
         }
-
-        
     }
 }
