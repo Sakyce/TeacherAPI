@@ -29,7 +29,7 @@ namespace NullTeacher
         public NullTeacher()
         {
             disableNpcs = true;
-            caughtOffset = new Vector3(0, 1.5f, 0);
+            caughtOffset = new Vector3(0, 0, 0);
         }
 
         public override void GetAngry(float value)
@@ -60,7 +60,7 @@ namespace NullTeacher
             animator.SetDefaultAnimation(NullConfiguration.ReplaceNullWithBaldloon.Value ? "Baldloon" : "Normal", 1f);
             looker.layerMask = 98305; // can see windows at this layer
 
-            navigator.Entity.SetHeight(5.5f);
+            navigator.Entity.SetHeight(5f);
 
             AddLoseSound(
                 CoreGameManager.Instance.lives < 1 && CoreGameManager.Instance.extraLives < 1
