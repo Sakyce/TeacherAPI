@@ -20,6 +20,7 @@ namespace NullTeacher
         {
             new Harmony("sakyce.baldiplus.teacherextension.null").PatchAllConditionals();
             Instance = this;
+            TeacherPlugin.RequiresAssetsFolder(this); // Very important, or else people will complain about Beans!
             NullConfiguration.Setup();
             LoadingEvents.RegisterOnAssetsLoaded(OnassetsLoaded, false);
         }

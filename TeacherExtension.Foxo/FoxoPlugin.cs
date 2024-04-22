@@ -24,6 +24,7 @@ namespace TeacherExtension.Foxo
             new Harmony("sakyce.baldiplus.teacherextension.foxo").PatchAllConditionals();
             Instance = this;
             FoxoConfiguration.Setup();
+            TeacherPlugin.RequiresAssetsFolder(this); // Critical!!!
             LoadingEvents.RegisterOnAssetsLoaded(OnAssetsLoaded, false);
         }
 

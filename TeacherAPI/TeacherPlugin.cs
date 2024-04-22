@@ -7,7 +7,9 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using TeacherAPI.patches;
 using TeacherAPI.utils;
 using UnityEngine;
 using static BepInEx.BepInDependency;
@@ -75,6 +77,26 @@ namespace TeacherAPI
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("Multiple Baldis found in the level!"));
             }
             return baldis.First();
+        }
+
+        /// <summary>
+        /// Will show a warning screen telling the user to install the mod correctly
+        /// if the folder for the specified plugin is not found in Modded.
+        /// </summary>
+        public static void RequiresAssetsFolder(BaseUnityPlugin plug)
+        {
+            string assetsPath = AssetLoader.GetModPath(plug);
+            if (!Directory.Exists(assetsPath))
+            {
+                WarningScreenCustomText.ShowWarningScreen(String.Format(@"
+The mod <color=blue>{0}</color> must have the assets file in <color=red>StreamingAssets/Modded</color>!</color>
+
+The name of the assets folder must be <color=red>{1}</color>.
+
+
+<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
+", Path.GetFileName(plug.Info.Location), plug.Info.Metadata.GUID));
+            }
         }
 
         public static T[] GetTeachersOfType<T>() where T : Teacher
