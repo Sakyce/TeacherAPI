@@ -22,7 +22,7 @@
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<PackageId>Sakyce.TeacherAPI</PackageId>
 		<Title>TeacherAPI for Baldi's Basics Plus</Title>
-		<Version>0.0.3</Version>
+		<Version>0.0.4</Version>
 		<Description>Library that helps you to add more Teachers to Baldi's Basics Plus</Description>
 		<Copyright>GNU GPLv3</Copyright>
 		<PackageProjectUrl>https://discord.gg/75ykaFd6sB</PackageProjectUrl>
