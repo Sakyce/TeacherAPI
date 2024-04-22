@@ -15,6 +15,11 @@ namespace TeacherAPI
         /// </summary>
         protected Vector3 caughtOffset = Vector3.zero;
         
+        /// <summary>
+        /// When enabled, doesn't spawns NPCs when spoopmode activates. Also removes NPC posters from office.
+        /// </summary>
+        public bool disableNpcs = false;
+        
         // Overrides
         public override void Initialize()
         {
@@ -167,7 +172,9 @@ namespace TeacherAPI
             TeacherPlugin.Instance.SpoopModeEnabled = true;
             Singleton<MusicManager>.Instance.StopMidi();
             Singleton<BaseGameManager>.Instance.BeginSpoopMode();
-            ec.SpawnNPCs();
+            if (!disableNpcs) { 
+                ec.SpawnNPCs(); 
+            }
             if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Main)
             {
                 // Teacher is already in HappyBaldi position, do nothing.
