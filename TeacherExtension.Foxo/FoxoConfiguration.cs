@@ -1,7 +1,4 @@
 ﻿using BepInEx.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TeacherExtension.Foxo
 {
@@ -18,9 +15,9 @@ namespace TeacherExtension.Foxo
         internal static void Setup()
         {
             Weight = FoxoPlugin.Instance.Config.Bind(
-                "Foxo", 
-                "Weight", 
-                100, 
+                "Foxo",
+                "Weight",
+                100,
                 "More it is higher, more there is a chance of him spawning. (Defaults to 100. For comparison, Baldi weight is 100) (Requires Restart)"
             );
             FoxFloor = FoxoPlugin.Instance.Config.Bind(

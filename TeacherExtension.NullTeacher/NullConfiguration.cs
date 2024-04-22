@@ -11,7 +11,7 @@ namespace NullTeacher
         internal static void Setup()
         {
             SpawnWeight = NullTeacherPlugin.Instance.Config.Bind(
-                "Null", "SpawnWeight", 20, 
+                "Null", "SpawnWeight", 20,
                 "More it is higher, more there is a chance of him spawning. (Defaults to 100. For comparison, Baldi weight is 100) (Requires Restart)"
             );
             ReplaceNullWithBaldloon = NullTeacherPlugin.Instance.Config.Bind(

@@ -1,10 +1,8 @@
 ﻿using BepInEx;
 using HarmonyLib;
 using MTM101BaldAPI;
-using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.Registers;
-using System;
 using TeacherAPI;
 using static BepInEx.BepInDependency;
 

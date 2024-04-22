@@ -1,11 +1,4 @@
-﻿using HarmonyLib;
-using UnityEngine;
-using System.Collections;
-using TeacherAPI.utils;
-using System;
-using UnityEngine.SceneManagement;
-
-namespace TeacherAPI.debug
+﻿namespace TeacherAPI.debug
 {
 #if DEBUG
 

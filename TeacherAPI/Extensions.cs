@@ -1,6 +1,6 @@
-﻿using System;
+﻿using HarmonyLib;
+using System;
 using System.Linq;
-using HarmonyLib;
 using TeacherAPI.utils;
 using UnityEngine;
 
@@ -40,7 +40,8 @@ namespace TeacherAPI
             {
                 var teacherstate = (TeacherState)state;
                 promise.Resolve(teacherstate);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Debug.LogWarning($"Handled InvalidCastException : Tried to cast {state} to Teacher State");
                 promise.Fail(ex);

@@ -4,13 +4,9 @@ using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
 using MTM101BaldAPI.Registers;
-using System.Collections.Generic;
-using System.Linq;
+using TeacherAPI;
 using UnityEngine;
 using static BepInEx.BepInDependency;
-using TeacherAPI;
-using TeacherAPI.utils;
-using System.IO;
 
 namespace TeacherExtension.Foxo
 {
@@ -20,7 +16,7 @@ namespace TeacherExtension.Foxo
     public class FoxoPlugin : BaseUnityPlugin
     {
         public static FoxoPlugin Instance { get; private set; }
-        public Foxo Foxo { get;  private set; }
+        public Foxo Foxo { get; private set; }
         public Foxo DarkFoxo { get; private set; }
 
         internal void Awake()

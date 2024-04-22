@@ -26,7 +26,7 @@ namespace NullTeacher
             // Only cafeterias
             level.potentialSpecialRooms = (
                 from x in RoomAssetMetaStorage.Instance.AllOfCategory(RoomCategory.Special)
-                //where x.value.name.Contains("Cafeteria")
+                    //where x.value.name.Contains("Cafeteria")
                 select new WeightedRoomAsset() { selection = x.value, weight = 100 }
             ).ToArray();
             foreach (var special in level.potentialSpecialRooms)
@@ -46,7 +46,7 @@ namespace NullTeacher
             level.facultyStickToHallChance = 0.33f;
             level.extraDoorChance = 0.6f;
             level.windowChance = 0.8f;
-            
+
             level.standardDarkLevel = Color.black;
             level.lightMode = LightMode.Greatest;
 

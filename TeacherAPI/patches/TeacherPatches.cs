@@ -1,11 +1,6 @@
 ﻿using HarmonyLib;
-using TeacherAPI.utils;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using UnityEngine;
+using TeacherAPI.utils;
 
 namespace TeacherAPI.patches
 {
@@ -115,7 +110,7 @@ namespace TeacherAPI.patches
                 teacher.GetAngry(val);
             }
             return true;
-        } 
+        }
     }
 
     [HarmonyPatch(typeof(RulerEvent), nameof(RulerEvent.Begin))]

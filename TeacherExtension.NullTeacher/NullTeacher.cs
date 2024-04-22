@@ -1,8 +1,6 @@
 ﻿using MTM101BaldAPI.Components;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using TeacherAPI;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -27,7 +25,6 @@ namespace NullTeacher
 
         public Cell previousCell;
         public Cell currentCell;
-        public CustomBal
 
         public NullTeacher()
         {
@@ -49,7 +46,7 @@ namespace NullTeacher
             genericPhrases.Add(NullPhrase.Stop);
             genericPhrases.Add(NullPhrase.Where);
 
-            foreach (var itemtype in new Items[] { Items.DoorLock , Items.Wd40, Items.PortalPoster, Items.ChalkEraser, Items.Bsoda, Items.GrapplingHook, Items.ZestyBar, Items.Teleporter })
+            foreach (var itemtype in new Items[] { Items.DoorLock, Items.Wd40, Items.PortalPoster, Items.ChalkEraser, Items.Bsoda, Items.GrapplingHook, Items.ZestyBar, Items.Teleporter })
             {
                 usefulItems.Add(itemtype);
             }
@@ -66,8 +63,8 @@ namespace NullTeacher
             navigator.Entity.SetHeight(5.5f);
 
             AddLoseSound(
-                CoreGameManager.Instance.lives < 1 && CoreGameManager.Instance.extraLives < 1 
-                ? NullAssets.phrases[NullPhrase.Haha] 
+                CoreGameManager.Instance.lives < 1 && CoreGameManager.Instance.extraLives < 1
+                ? NullAssets.phrases[NullPhrase.Haha]
                 : NullAssets.lose, 1);
 
             ReplaceEventText<RulerEvent>("What do you mean Null broke his ruler?!");

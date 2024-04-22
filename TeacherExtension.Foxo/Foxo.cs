@@ -1,11 +1,10 @@
-﻿using TeacherAPI;
-using TeacherAPI.utils;
-using MTM101BaldAPI;
+﻿using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
-using System;
 using System.Collections;
 using System.Linq;
+using TeacherAPI;
+using TeacherAPI.utils;
 using UnityEngine;
 
 namespace TeacherExtension.Foxo
@@ -54,7 +53,8 @@ namespace TeacherExtension.Foxo
 
             // Shortcut functions
             AudioClip Clip(string path) => AssetLoader.AudioClipFromMod(FoxoPlugin.Instance, "audio", path);
-            SoundObject NoSubtitle(AudioClip audio, SoundType type) {
+            SoundObject NoSubtitle(AudioClip audio, SoundType type)
+            {
                 var snd = ObjectCreators.CreateSoundObject(audio, "", type, Color.white);
                 snd.subtitle = false;
                 return snd;
@@ -108,9 +108,12 @@ namespace TeacherExtension.Foxo
             // Random events
             ReplaceEventText<RulerEvent>("Uh oh, Foxo broke his ruler. This is not good.");
 
-            if (forceWrath) {
+            if (forceWrath)
+            {
                 behaviorStateMachine.ChangeState(new Foxo_WrathHappy(this));
-            } else {
+            }
+            else
+            {
                 behaviorStateMachine.ChangeState(new Foxo_Happy(this));
             }
         }
@@ -118,7 +121,7 @@ namespace TeacherExtension.Foxo
         // Only play visual/audio effects, doesn't actually moves
         public new void SlapNormal()
         {
-            
+
             animator.SetDefaultAnimation("SlapIdle", 1f);
             animator.Play("Slap", 1f);
             SlapRumble();
@@ -230,7 +233,7 @@ namespace TeacherExtension.Foxo
     }
     public class Foxo_Scary : Foxo_StateBase
     {
-        public Foxo_Scary(Foxo foxo) : base(foxo){}
+        public Foxo_Scary(Foxo foxo) : base(foxo) { }
         public override void Enter()
         {
             base.Enter();
@@ -319,7 +322,8 @@ namespace TeacherExtension.Foxo
         public TeacherState previousState;
         private float time;
 
-        public Foxo_Praise(Foxo foxo, TeacherState previousState) : base(foxo) {
+        public Foxo_Praise(Foxo foxo, TeacherState previousState) : base(foxo)
+        {
             this.previousState = previousState;
             time = 4f;
         }

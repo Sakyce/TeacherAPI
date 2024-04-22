@@ -9,17 +9,17 @@ namespace TeacherAPI
 {
     public class Teacher : Baldi
     {
-        
+
         /// <summary>
         /// Small offset added to the camera during Jumpscare.
         /// </summary>
         protected Vector3 caughtOffset = Vector3.zero;
-        
+
         /// <summary>
         /// When enabled, doesn't spawns NPCs when spoopmode activates. Also removes NPC posters from office.
         /// </summary>
         public bool disableNpcs = false;
-        
+
         // Overrides
         public override void Initialize()
         {
@@ -47,10 +47,11 @@ namespace TeacherAPI
             base.Despawn();
             TeacherPlugin.Instance.spawnedTeachers.Remove(this);
         }
-        
+
         public override void CaughtPlayer(PlayerManager player)
         {
-            try { base.CaughtPlayer(player); } catch (Exception e)
+            try { base.CaughtPlayer(player); }
+            catch (Exception e)
             {
                 MTM101BaldiDevAPI.CauseCrash(TeacherPlugin.Instance.Info, e);
             }
@@ -60,7 +61,7 @@ namespace TeacherAPI
         // Virtuals
         public virtual void OnAllNotebooksCollected()
         {
-            
+
         }
 
         // Ruler related stuff
@@ -149,7 +150,7 @@ namespace TeacherAPI
         /// <param name="weight"></param>
         public void AddLoseSound(SoundObject snd, int weight)
         {
-            loseSounds = loseSounds.AddItem(new WeightedSoundObject() { selection = snd , weight = weight }).ToArray();
+            loseSounds = loseSounds.AddItem(new WeightedSoundObject() { selection = snd, weight = weight }).ToArray();
         }
 
         /// <summary>
@@ -160,11 +161,11 @@ namespace TeacherAPI
         {
             if (TeacherPlugin.Instance.SpoopModeEnabled)
             {
-                if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free) 
+                if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free)
                     Despawn();
                 return;
             }
-            
+
             // For which who have spawned the custom teacher after Baldi
             var happyBaldi = ec.GetComponentInChildren<HappyBaldi>();
             if (happyBaldi) happyBaldi.sprite.enabled = false;
@@ -172,13 +173,15 @@ namespace TeacherAPI
             TeacherPlugin.Instance.SpoopModeEnabled = true;
             Singleton<MusicManager>.Instance.StopMidi();
             Singleton<BaseGameManager>.Instance.BeginSpoopMode();
-            if (!disableNpcs) { 
-                ec.SpawnNPCs(); 
+            if (!disableNpcs)
+            {
+                ec.SpawnNPCs();
             }
             if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Main)
             {
                 // Teacher is already in HappyBaldi position, do nothing.
-            } else if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free)
+            }
+            else if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free)
             {
                 Despawn();
             }
@@ -192,7 +195,7 @@ namespace TeacherAPI
         {
             StartCoroutine(ReplaceMusicDelay());
         }
-        private IEnumerator ReplaceMusicDelay(SoundObject snd=null)
+        private IEnumerator ReplaceMusicDelay(SoundObject snd = null)
         {
             // Because the midi isn't playing immediatlely obviously very ugly hack pls help me
             Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Volume = 0;

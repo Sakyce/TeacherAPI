@@ -1,13 +1,9 @@
-﻿using BepInEx;
-using BepInEx.Logging;
-using HarmonyLib;
+﻿using BepInEx.Logging;
 using MTM101BaldAPI.AssetTools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using UnityEngine;
 
 namespace TeacherAPI.utils

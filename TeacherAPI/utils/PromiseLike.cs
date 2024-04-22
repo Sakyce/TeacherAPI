@@ -9,7 +9,7 @@ namespace TeacherAPI.utils
 
         public PromiseLike()
         {
-            
+
         }
         public PromiseLike<T> IfSuccess(Action<T> action)
         {

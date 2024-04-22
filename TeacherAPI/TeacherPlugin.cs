@@ -1,16 +1,16 @@
 ﻿using BepInEx;
+using BepInEx.Bootstrap;
+using BepInEx.Logging;
 using HarmonyLib;
-using TeacherAPI.utils;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Registers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TeacherAPI.utils;
 using UnityEngine;
 using static BepInEx.BepInDependency;
-using BepInEx.Bootstrap;
-using BepInEx.Logging;
 
 namespace TeacherAPI
 {
@@ -28,7 +28,7 @@ namespace TeacherAPI
         public Baldi currentBaldi;
 
         public static AssetManager assetManager = new AssetManager();
-        public static ManualLogSource Log {get => Instance.Logger;}
+        public static ManualLogSource Log { get => Instance.Logger; }
 
         internal void Awake()
         {
@@ -60,7 +60,8 @@ namespace TeacherAPI
             try
             {
                 originalBaldiPerFloor.Add(floorObject, GetPotentialBaldi(floorObject));
-            } catch (ArgumentException) {}
+            }
+            catch (ArgumentException) { }
         }
         internal Baldi GetPotentialBaldi(LevelObject floorObject)
         {
@@ -88,8 +89,9 @@ namespace TeacherAPI
         public static bool IsEndlessFloorsLoaded()
         {
             return (
-                from x in Chainloader.PluginInfos 
-                where x.Key.Equals("mtm101.rulerp.baldiplus.endlessfloors") select x.Key
+                from x in Chainloader.PluginInfos
+                where x.Key.Equals("mtm101.rulerp.baldiplus.endlessfloors")
+                select x.Key
             ).Count() > 0;
         }
 

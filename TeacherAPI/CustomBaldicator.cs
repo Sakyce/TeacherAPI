@@ -1,6 +1,5 @@
 ﻿using MTM101BaldAPI.Components;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,6 @@ namespace TeacherAPI
     /// </summary>
     public class CustomBaldicator : MonoBehaviour
     {
-        private bool hidden = false;
         private CustomImageAnimator animator;
 
         private Vector3 StartingPosition = new Vector3(9, -5, 1);
@@ -21,7 +19,7 @@ namespace TeacherAPI
 
         private Image image;
 
-        private void Awake()
+        internal void Awake()
         {
             image = GetComponent<Image>();
             animator = gameObject.AddComponent<CustomImageAnimator>();
@@ -30,10 +28,7 @@ namespace TeacherAPI
 
         public void ActivateBaldicator(string animationToPlay)
         {
-            if (!hidden)
-            {
-                StartCoroutine(BaldicatorActivateAnimation(animationToPlay));
-            }
+            StartCoroutine(BaldicatorActivateAnimation(animationToPlay));
         }
 
         public void AddAnimation(string key, CustomAnimation<Sprite> sprites)
@@ -48,7 +43,7 @@ namespace TeacherAPI
         public static CustomBaldicator CreateBaldicator()
         {
             var hudManager = Singleton<CoreGameManager>.Instance.GetHud(0);
-            var baldiclone = GameObject.Instantiate(hudManager.gameObject.transform.Find("Baldi").gameObject);
+            var baldiclone = Instantiate(hudManager.gameObject.transform.Find("Baldi").gameObject);
             baldiclone.name = "Custom Baldicator";
             baldiclone.transform.SetParent(hudManager.transform);
             return baldiclone.AddComponent<CustomBaldicator>();
