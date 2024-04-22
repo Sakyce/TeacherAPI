@@ -331,6 +331,7 @@ namespace NullTeacher
     public class Null_Chase : Null_StateBase
     {
         private float timer;
+        private Material noGllitchMat;
         public Null_Chase(NullTeacher Null) : base(Null)
         {
         }
@@ -338,6 +339,7 @@ namespace NullTeacher
         public override void Enter()
         {
             base.Enter();
+            noGllitchMat = Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(x => x.name == "SpriteStandard_Billboard_NoGlitch");
             timer = ohno.Delay;
             ohno.ResetSlapDistance();
             ohno.spriteBase.SetActive(true);
@@ -367,6 +369,7 @@ namespace NullTeacher
                 ohno.AudMan.audioDevice.ignoreListenerPause = true;
                 ohno.SpeechCheck(NullPhrase.Haha, 1f);
                 ohno.ec.SetAllLights(true);
+                ohno.spriteRenderer[0].material = noGllitchMat;
                 Shader.SetGlobalColor("_SkyboxColor", Color.black);
 
                 teacher.CaughtPlayer(other.GetComponent<PlayerManager>());
