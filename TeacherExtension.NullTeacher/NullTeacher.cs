@@ -29,7 +29,7 @@ namespace NullTeacher
         public NullTeacher()
         {
             disableNpcs = true;
-            caughtOffset = new Vector3(0, 1.5f, 0);
+            caughtOffset = new Vector3(0, 0, 0);
         }
 
         public override void GetAngry(float value)
@@ -60,7 +60,7 @@ namespace NullTeacher
             animator.SetDefaultAnimation(NullConfiguration.ReplaceNullWithBaldloon.Value ? "Baldloon" : "Normal", 1f);
             looker.layerMask = 98305; // can see windows at this layer
 
-            navigator.Entity.SetHeight(5.5f);
+            navigator.Entity.SetHeight(5f);
 
             AddLoseSound(
                 CoreGameManager.Instance.lives < 1 && CoreGameManager.Instance.extraLives < 1
@@ -332,6 +332,7 @@ namespace NullTeacher
     public class Null_Chase : Null_StateBase
     {
         private float timer;
+        private Material noGllitchMat;
         public Null_Chase(NullTeacher Null) : base(Null)
         {
         }
@@ -339,6 +340,7 @@ namespace NullTeacher
         public override void Enter()
         {
             base.Enter();
+            noGllitchMat = Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(x => x.name == "SpriteStandard_Billboard_NoGlitch");
             timer = ohno.Delay;
             ohno.ResetSlapDistance();
             ohno.spriteBase.SetActive(true);
@@ -368,6 +370,7 @@ namespace NullTeacher
                 ohno.AudMan.audioDevice.ignoreListenerPause = true;
                 ohno.SpeechCheck(NullPhrase.Haha, 1f);
                 ohno.ec.SetAllLights(true);
+                ohno.spriteRenderer[0].material = noGllitchMat;
                 Shader.SetGlobalColor("_SkyboxColor", Color.black);
 
                 teacher.CaughtPlayer(other.GetComponent<PlayerManager>());
