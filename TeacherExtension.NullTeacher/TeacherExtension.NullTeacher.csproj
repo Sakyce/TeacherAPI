@@ -51,6 +51,7 @@
 		</Reference>
 
 		<ProjectReference Include="..\TeacherAPI\TeacherAPI.csproj" />
+		<ProjectReference Include="..\TeacherAPI.Analyzers\TeacherAPI.Analyzers.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 
 </Project>

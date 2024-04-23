@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherExtension.NullTeache
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherExtension.NullTeacher", "TeacherExtension.NullTeacher\TeacherExtension.NullTeacher.csproj", "{3E254AC2-C0E4-478B-A193-9230E6D7F93C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeacherAPI.Analyzers", "TeacherAPI.Analyzers\TeacherAPI.Analyzers.csproj", "{35F263F8-723A-4C2A-902C-7660DFFA3D2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{3E254AC2-C0E4-478B-A193-9230E6D7F93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E254AC2-C0E4-478B-A193-9230E6D7F93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E254AC2-C0E4-478B-A193-9230E6D7F93C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35F263F8-723A-4C2A-902C-7660DFFA3D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35F263F8-723A-4C2A-902C-7660DFFA3D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35F263F8-723A-4C2A-902C-7660DFFA3D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35F263F8-723A-4C2A-902C-7660DFFA3D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
