@@ -98,8 +98,9 @@ namespace NullTeacher
             }
 
             spriteBase.SetActive(false);
-            behaviorStateMachine.ChangeState(new Null_Happy(this));
         }
+        public override TeacherState GetAngryState() => new Null_Chase(this);
+        public override TeacherState GetHappyState() => new Null_Happy(this);
 
         public override void VirtualUpdate()
         {

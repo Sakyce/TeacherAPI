@@ -107,16 +107,9 @@ namespace TeacherExtension.Foxo
 
             // Random events
             ReplaceEventText<RulerEvent>("Uh oh, Foxo broke his ruler. This is not good.");
-
-            if (forceWrath)
-            {
-                behaviorStateMachine.ChangeState(new Foxo_WrathHappy(this));
-            }
-            else
-            {
-                behaviorStateMachine.ChangeState(new Foxo_Happy(this));
-            }
         }
+        public override TeacherState GetAngryState() => forceWrath ? (Foxo_StateBase)(new Foxo_Wrath(this)) : new Foxo_Chase(this);
+        public override TeacherState GetHappyState() => forceWrath ? (Foxo_StateBase)(new Foxo_WrathHappy(this)) : new Foxo_Happy(this);
 
         // Only play visual/audio effects, doesn't actually moves
         public new void SlapNormal()
@@ -193,6 +186,7 @@ namespace TeacherExtension.Foxo
             if (!target.plm.running)
                 target.plm.AddStamina(target.plm.staminaDrop * 0.8f * Time.deltaTime * target.PlayerTimeScale, true);
         }
+
     }
     public class Foxo_StateBase : TeacherState
     {

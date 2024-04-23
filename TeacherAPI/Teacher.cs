@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TeacherAPI
 {
-    public class Teacher : Baldi
+    public abstract class Teacher : Baldi
     {
 
         /// <summary>
@@ -42,6 +42,7 @@ namespace TeacherAPI
 
             TeacherPlugin.Instance.spawnedTeachers.Add(this);
         }
+
         public override void Despawn()
         {
             base.Despawn();
@@ -63,6 +64,22 @@ namespace TeacherAPI
         {
 
         }
+
+        /// <summary>
+        /// The state of the teacher when he goes angry. 
+        /// Only used when your Teacher is being spawned during SpoopMode.
+        /// This is also used when another Teacher went into SpoopMode.
+        /// The state automatically change after Initialize by an integrated HarmonyPatch!!!
+        /// </summary>
+        /// <returns></returns>
+        public abstract TeacherState GetAngryState();
+
+        /// <summary>
+        /// The state of your teacher when spawned before SpoopMode.
+        /// The state automatically change after Initialize by an integrated HarmonyPatch!!!
+        /// </summary>
+        /// <returns></returns>
+        public abstract TeacherState GetHappyState();
 
         // Ruler related stuff
         protected virtual void OnRulerBroken()

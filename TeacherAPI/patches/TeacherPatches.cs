@@ -45,6 +45,19 @@ namespace TeacherAPI.patches
         }
     }
 
+    [HarmonyPatch(typeof(Teacher), nameof(Teacher.Initialize))] // Am I patching my own teachers ???
+    internal class ChangeStateAfterInitPatch
+    {
+        internal static void Postfix(Teacher __instance)
+        {
+            __instance.behaviorStateMachine.ChangeState(
+                TeacherPlugin.Instance.SpoopModeEnabled
+                    ? __instance.GetAngryState()
+                    : __instance.GetHappyState()
+            );
+        }
+    }
+
     internal class ReplaceHappyBaldiWithTeacherPatch
     {
         internal static void ReplaceHappyBaldi(BaseGameManager __instance)
