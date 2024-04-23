@@ -67,7 +67,7 @@ namespace NullTeacher
 
             poster = AssetLoader.TextureFromMod(NullTeacherPlugin.Instance, "poster.png");
             baldloon = AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(NullTeacherPlugin.Instance, "baldloon.png"), 23f);
-            nullsprite = AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(NullTeacherPlugin.Instance, "null.png"), 23f);
+            nullsprite = AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(NullTeacherPlugin.Instance, "null.png"), 65f);
             lose = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(NullTeacherPlugin.Instance, "NullEnd.wav"), "", SoundType.Effect, Color.white, 0);
             ambient = ObjectCreators.CreateSoundObject(AssetLoader.AudioClipFromMod(NullTeacherPlugin.Instance, "ambient.mp3"), "", SoundType.Music, Color.black);
             ambient.subtitle = false;
