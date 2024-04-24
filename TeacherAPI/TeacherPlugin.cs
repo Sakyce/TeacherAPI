@@ -64,7 +64,12 @@ namespace TeacherAPI
         {
             if (floorObject.potentialBaldis.Length < 1)
             {
-                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("No potential baldi found. Possibly because of another mod that edit the teacher without using More Teachers API."));
+                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("No potential baldi found. Possttttibly because of another mod that edit the teacher without using More Teachers API."));
+            }
+            else if (floorObject.potentialBaldis.Length > 1)
+            {
+                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("More than one potential baldi found. Possibly because of another mod."));
+            }
             }
 
             if (floorName == "INF")
