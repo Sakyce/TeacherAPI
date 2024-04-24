@@ -29,14 +29,31 @@ namespace TeacherAPI
         public List<Teacher> spawnedTeachers = new List<Teacher>();
         public Baldi currentBaldi;
 
-        public static AssetManager assetManager = new AssetManager();
+        /// <summary>
+        /// Doesn't works with MTM Modding API 3.6.0.0
+        /// </summary>
+        public static bool DebugMode = false;
         public static ManualLogSource Log { get => Instance.Logger; }
 
         internal void Awake()
         {
             new Harmony("sakyce.baldiplus.teacherapi").PatchAllConditionals();
             Instance = this;
+//            foreach (var plugin in Chainloader.PluginInfos)
+//            {
+//                if (plugin.Value.Metadata.GUID == "mtm101.rulerp.bbplus.baldidevapi" && plugin.Value.Metadata.Version <= new Version("3.6.0.0"))
+//                {
+//                    ShowWarningScreen($@"
+//The mod <color=blue>TeacherAPI</color> requires a more recent version of <color=red>Baldi Dev API</color>!</color>
 
+//The current version you have is <color=yellow>{plugin.Value.Metadata.Version}</color> and the required version is <color=green>4.0.0.0</color>
+
+
+//<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
+//");
+//                    break;
+//                }
+//            }
             GeneratorManagement.Register(this, GenerationModType.Base, EditGenerator);
         }
         internal static Baldi ConvertTeacherToBaldi(Baldi teacher)
@@ -97,6 +114,11 @@ The name of the assets folder must be <color=red>{1}</color>.
 <alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
 ", Path.GetFileName(plug.Info.Location), plug.Info.Metadata.GUID));
             }
+        }
+
+        public static void ShowWarningScreen(string text)
+        {
+            WarningScreenCustomText.ShowWarningScreen(text);
         }
 
         public static T[] GetTeachersOfType<T>() where T : Teacher
