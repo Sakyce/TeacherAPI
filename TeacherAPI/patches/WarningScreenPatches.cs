@@ -14,6 +14,10 @@ namespace TeacherAPI.patches
 
         internal static bool Prefix(WarningScreen __instance)
         {
+            if (TeacherAPIConfiguration.DisableAssetsWarningScreen.Value)
+            {
+                return true;
+            }
             if (forceText != null)
             {
                 __instance.textBox.SetText(forceText);
@@ -23,12 +27,12 @@ namespace TeacherAPI.patches
                 return false; // will prevent Baldi from formating the text to "Click button to continue"
             }
 
-            preventAdvance = true;
+            // Custom Warning for Teacher API
             var text = @"<color=red>Here be dragons!!!</color> 
 <color=blue>TeacherAPI</color> is still a <color=yellow>prototype</color> and you will see unexpected things!</color>
 
+Please read the instructions to report any bugs in the mod page!
 If you encounter an error, send me the Logs!
-You can find the logs in <color=yellow>Baldi's Basics Plus/BepInEx/LogOutput.log</color>
 ";
             void Format(string txt)
             {
@@ -41,6 +45,7 @@ You can find the logs in <color=yellow>Baldi's Basics Plus/BepInEx/LogOutput.log
 
             IEnumerator Coro()
             {
+                preventAdvance = true;
                 __instance.textBox.SetText(text);
                 yield return new WaitForSeconds(4f);
                 preventAdvance = false;
@@ -49,18 +54,28 @@ You can find the logs in <color=yellow>Baldi's Basics Plus/BepInEx/LogOutput.log
                 yield break;
             }
 
-            if (TeacherPlugin.DebugMode)
+            if (TeacherAPIConfiguration.DebugMode.Value)
             {
                 preventAdvance = false;
                 GlobalStateManager.Instance.skipNameEntry = true; // Doesn't works with Dev API 3.6.0.0
                 SceneManager.LoadScene("MainMenu");
                 return false;
             }
+            if (!TeacherAPIConfiguration.EnableCustomWarningScreen.Value)
+            {
+                return true;
+            }
             __instance.StartCoroutine(Coro());
             return false;
         }
         internal static void ShowWarningScreen(string text)
         {
+            if (TeacherAPIConfiguration.DisableAssetsWarningScreen.Value)
+            {
+                Debug.LogError(text);
+                return;
+            }
+
             forceText = text;
             preventAdvance = true;
             SceneManager.LoadScene("Warnings");
@@ -70,6 +85,6 @@ You can find the logs in <color=yellow>Baldi's Basics Plus/BepInEx/LogOutput.log
     [HarmonyPriority(Priority.Low)]
     internal class WarningScreenPreventAdvance
     {
-        internal static bool Prefix() => !WarningScreenCustomText.preventAdvance;
+        internal static bool Prefix() => !WarningScreenCustomText.preventAdvance || TeacherAPIConfiguration.DisableAssetsWarningScreen.Value;
     }
 }

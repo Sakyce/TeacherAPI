@@ -12,6 +12,7 @@ using System.Linq;
 using TeacherAPI.patches;
 using TeacherAPI.utils;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static BepInEx.BepInDependency;
 
 namespace TeacherAPI
@@ -29,32 +30,35 @@ namespace TeacherAPI
         public List<Teacher> spawnedTeachers = new List<Teacher>();
         public Baldi currentBaldi;
 
-        /// <summary>
-        /// Doesn't works with MTM Modding API 3.6.0.0
-        /// </summary>
-        public static bool DebugMode = false;
         public static ManualLogSource Log { get => Instance.Logger; }
 
         internal void Awake()
         {
-            new Harmony("sakyce.baldiplus.teacherapi").PatchAllConditionals();
             Instance = this;
-//            foreach (var plugin in Chainloader.PluginInfos)
-//            {
-//                if (plugin.Value.Metadata.GUID == "mtm101.rulerp.bbplus.baldidevapi" && plugin.Value.Metadata.Version <= new Version("3.6.0.0"))
-//                {
-//                    ShowWarningScreen($@"
-//The mod <color=blue>TeacherAPI</color> requires a more recent version of <color=red>Baldi Dev API</color>!</color>
+            TeacherAPIConfiguration.Setup();
+            //            foreach (var plugin in Chainloader.PluginInfos)
+            //            {
+            //                if (plugin.Value.Metadata.GUID == "mtm101.rulerp.bbplus.baldidevapi" && plugin.Value.Metadata.Version <= new Version("3.6.0.0"))
+            //                {
+            //                    ShowWarningScreen($@"
+            //The mod <color=blue>TeacherAPI</color> requires a more recent version of <color=red>Baldi Dev API</color>!</color>
 
-//The current version you have is <color=yellow>{plugin.Value.Metadata.Version}</color> and the required version is <color=green>4.0.0.0</color>
+            //The current version you have is <color=yellow>{plugin.Value.Metadata.Version}</color> and the required version is <color=green>4.0.0.0</color>
 
 
-//<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
-//");
-//                    break;
-//                }
-//            }
+            //<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
+            //");
+            //                    break;
+            //                }
+            //            }
+            new Harmony("sakyce.baldiplus.teacherapi").PatchAllConditionals();
             GeneratorManagement.Register(this, GenerationModType.Base, EditGenerator);
+
+            // Remove this when a more recent version of Dev API release
+            if (TeacherAPIConfiguration.DebugMode.Value)
+            {
+                SceneManager.LoadScene("MainMenu");
+            }
         }
         internal static Baldi ConvertTeacherToBaldi(Baldi teacher)
         {
@@ -70,6 +74,14 @@ namespace TeacherAPI
             {
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("More than one potential baldi found. Possibly because of another mod."));
             }
+
+            if (!TeacherAPIConfiguration.EnableBaldi.Value)
+            {
+                foreach (var baldi in floorObject.potentialBaldis)
+                {
+                    baldi.weight = 0;
+                }
+                Logger.LogInfo("Set Baldi weight to 0 for this floor");
             }
 
             if (floorName == "INF")
@@ -77,7 +89,7 @@ namespace TeacherAPI
                 // MTM, do you eat clowns at breakfast ? 
                 foreach (var baldi in floorObject.potentialBaldis)
                 {
-                    baldi.weight = 100;
+                    baldi.weight = TeacherAPIConfiguration.EnableBaldi.Value ? 100 : 0;
                 }
             }
 
