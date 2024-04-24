@@ -203,13 +203,6 @@ namespace TeacherExtension.Foxo
         public override void Enter()
         {
             base.Enter();
-            if (TeacherPlugin.Instance.SpoopModeEnabled)
-            {
-                Debug.Log("Spoop mode enabled, going directly to chase.");
-                foxo.behaviorStateMachine.ChangeState(new Foxo_Chase(foxo));
-                return;
-            }
-
             foxo.animator.Play("Wave", 1f);
             foxo.animator.SetDefaultAnimation("Happy", 1f);
             foxo.audMan.PlaySingle(Foxo.audios.Get<SoundObject>("hellothere"));
