@@ -48,16 +48,22 @@ namespace TeacherAPI
             }
             return promise;
         }
+        internal static void AsTeacherState(this NpcState state, Action<TeacherState> action)
+        {
+            state.AsTeacherState().IfSuccess(action);
+        }
 
         /// <summary>
-        /// Adds your teacher into the pool of potentialBaldis in the LevelObject.
+        /// Adds your teacher into the pool of potential teachers of the level. Doesn't affects potentialBaldis.
         /// </summary>
         /// <param name="levelObject"></param>
         /// <param name="teacher">The teacher to be added</param>
         /// <param name="weight">The weight of the teacher for the selection (as a reference, MoreTeachers default teachers have a weight of 100)</param>
-        public static void AddPotentialTeacher(this LevelObject levelObject, NPC teacher, int weight)
+        public static void AddPotentialTeacher(this LevelObject levelObject, Teacher teacher, int weight)
         {
-            levelObject.potentialBaldis = levelObject.potentialBaldis.AddItem(new WeightedNPC() { selection = teacher, weight = weight }).ToArray();
+            TeacherPlugin.Instance.potentialTeachersPerFloor[levelObject].Add(
+                new WeightedSelection<Teacher>() { selection = teacher, weight = weight }
+            );
         }
     }
 }

@@ -12,7 +12,7 @@ namespace NullTeacher.Patches
             {
                 pm.ec.MakeNoise(pm.transform.position, 127);
                 BaseGameManager.Instance.AngerBaldi(50f);
-                foreach (var teacher in TeacherPlugin.GetTeachersOfType<NullTeacher>())
+                foreach (var teacher in TeacherManager.Instance.GetTeachersOfType<NullTeacher>())
                 {
                     teacher.SpeechCheck(NullPhrase.Enough, 0.33f);
                 }

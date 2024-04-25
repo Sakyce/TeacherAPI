@@ -42,13 +42,13 @@ namespace TeacherAPI
             speedMultiplier = baseBaldi.speedMultiplier;
             appleTime = baseBaldi.appleTime;
 
-            TeacherPlugin.Instance.spawnedTeachers.Add(this);
+            TeacherManager.Instance.spawnedTeachers.Add(this);
         }
 
         public override void Despawn()
         {
             base.Despawn();
-            TeacherPlugin.Instance.spawnedTeachers.Remove(this);
+            TeacherManager.Instance.spawnedTeachers.Remove(this);
         }
 
         public override void CaughtPlayer(PlayerManager player)
@@ -178,7 +178,7 @@ namespace TeacherAPI
         /// </summary>
         public void ActivateSpoopMode()
         {
-            if (TeacherPlugin.Instance.SpoopModeEnabled)
+            if (TeacherManager.Instance.SpoopModeActivated)
             {
                 if (Singleton<CoreGameManager>.Instance.currentMode == Mode.Free)
                     Despawn();
@@ -189,7 +189,7 @@ namespace TeacherAPI
             var happyBaldi = ec.GetComponentInChildren<HappyBaldi>();
             if (happyBaldi) happyBaldi.sprite.enabled = false;
 
-            TeacherPlugin.Instance.SpoopModeEnabled = true;
+            TeacherManager.Instance.SpoopModeActivated = true;
             Singleton<MusicManager>.Instance.StopMidi();
             Singleton<BaseGameManager>.Instance.BeginSpoopMode();
             if (!disableNpcs)
@@ -206,6 +206,14 @@ namespace TeacherAPI
             }
             ec.StartEventTimers();
         }
+
+        /// <summary>
+        /// The flavor text for this teacher. 
+        /// </summary>
+        /// <param name="amount">The amount of notebook such as $"{current}/{max}", or just current in Endless</param>
+        /// <returns>The text that shows up on the top left of the screen</returns>
+        public virtual string GetNotebooksText(string amount) => $"{amount} {name.Replace("(Clone)", "")} Notebooks";
+        public virtual WeightedSelection<Teacher> GetTeacherNotebookWeight() => new WeightedSelection<Teacher>() { selection = this, weight = 100 };
         public void ReplaceMusic(SoundObject snd)
         {
             StartCoroutine(ReplaceMusicDelay(snd));

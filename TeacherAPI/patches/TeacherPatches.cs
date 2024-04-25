@@ -11,28 +11,10 @@ namespace TeacherAPI.patches
     {
         public static void Postfix(EnvironmentController __instance, ref Baldi __result)
         {
-            if (__result == null)
+            if (__result == null && TeacherManager.Instance.MainTeacher != null)
             {
-                foreach (NPC npc in __instance.npcs)
-                {
-                    if (npc.IsTeacher())
-                    {
-                        var fakeBaldi = TeacherPlugin.ConvertTeacherToBaldi((Baldi)npc);
-                        __result = fakeBaldi;
-                        break;
-                    }
-                }
+                __result = (Baldi)TeacherManager.Instance.MainTeacher;
             }
-        }
-    }
-
-    [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.Initialize))]
-    internal class CleanupSpawnedTeachersPatch
-    {
-        internal static bool Prefix()
-        {
-            TeacherPlugin.Instance.spawnedTeachers.Clear();
-            return true;
         }
     }
 
@@ -41,7 +23,7 @@ namespace TeacherAPI.patches
     {
         internal static bool Prefix()
         {
-            TeacherPlugin.Instance.SpoopModeEnabled = true;
+            TeacherManager.Instance.SpoopModeActivated = true;
             return true;
         }
     }
@@ -51,10 +33,10 @@ namespace TeacherAPI.patches
     {
         internal static void Postfix()
         {
-            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers.Where(x => !x.HasInitialized))
+            foreach (var teacher in TeacherManager.Instance.spawnedTeachers.Where(x => !x.HasInitialized))
             {
                 teacher.behaviorStateMachine.ChangeState(
-                    TeacherPlugin.Instance.SpoopModeEnabled
+                    TeacherManager.Instance.SpoopModeActivated
                         ? teacher.GetAngryState()
                         : teacher.GetHappyState()
                 );
@@ -67,33 +49,18 @@ namespace TeacherAPI.patches
     {
         internal static void ReplaceHappyBaldi(BaseGameManager __instance)
         {
-            var customTeacherFound = false;
             var happyBaldi = __instance.Ec.gameObject.GetComponentInChildren<HappyBaldi>();
+            var teacherManager = __instance.Ec.gameObject.GetComponent<TeacherManager>();
 
-            var level = Singleton<BaseGameManager>.Instance.levelObject;
-            (from x in level.potentialBaldis select $"{x.selection.name} (weight: {x.weight})").Print($"Potential Baldis of {level.name}", TeacherPlugin.Log);
-            TeacherPlugin.Instance.currentBaldi = TeacherPlugin.Instance.GetPotentialBaldi(level);
-            TeacherPlugin.Instance.spawnedTeachers.Clear();
-            TeacherPlugin.Instance.SpoopModeEnabled = false;
-
-            // Spawn all teachers
-            for (int i = 0; i < __instance.Ec.npcsToSpawn.Count; i++)
+            // The main teacher
+            if (teacherManager.MainTeacherPrefab)
             {
-                var npc = __instance.Ec.npcsToSpawn[i];
-                if (npc.IsTeacher())
-                {
-                    customTeacherFound = true;
-                    __instance.Ec.SpawnNPC(npc, __instance.Ec.CellFromPosition(happyBaldi.transform.position).position);
-                    __instance.Ec.npcsToSpawn.RemoveAt(i);
-                    __instance.Ec.npcSpawnTile = __instance.Ec.npcSpawnTile.Where((c, ix) => ix != i).ToArray();
-                };
-            }
-            TeacherPlugin.Instance.spawnedTeachers.Print("Spawned Teachers", TeacherPlugin.Log);
+                var happyBaldiPos = __instance.Ec.CellFromPosition(happyBaldi.transform.position).position;
+                __instance.Ec.SpawnNPC(teacherManager.MainTeacherPrefab, happyBaldiPos);
 
-            if (customTeacherFound)
-            {
                 happyBaldi.sprite.enabled = false;
                 happyBaldi.audMan.enabled = false;
+                happyBaldi.audMan.disableSubtitles = true;
                 Singleton<MusicManager>.Instance.StopMidi();
             }
         }
@@ -121,13 +88,10 @@ namespace TeacherAPI.patches
     [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.AngerBaldi))]
     internal class AngerBaldiPatch
     {
-        public static bool Prefix(ref float val)
+        public static void Postfix(ref float val)
         {
-            foreach (Teacher teacher in TeacherPlugin.Instance.spawnedTeachers)
-            {
-                teacher.GetAngry(val);
-            }
-            return true;
+            var val2 = val;
+            TeacherManager.Instance.DoIfMainTeacher(t => t.GetAngry(val2));
         }
     }
 
@@ -136,10 +100,7 @@ namespace TeacherAPI.patches
     {
         public static void Postfix()
         {
-            foreach (Teacher teacher in TeacherPlugin.Instance.spawnedTeachers)
-            {
-                teacher.BreakRuler();
-            }
+            TeacherManager.Instance.DoIfMainTeacher(t => t.BreakRuler());
         }
     }
 
@@ -148,10 +109,7 @@ namespace TeacherAPI.patches
     {
         public static void Postfix()
         {
-            foreach (Teacher teacher in TeacherPlugin.Instance.spawnedTeachers)
-            {
-                teacher.RestoreRuler();
-            }
+            TeacherManager.Instance.DoIfMainTeacher(t => t.RestoreRuler());
         }
     }
 }

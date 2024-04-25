@@ -68,6 +68,9 @@ namespace TeacherAPI.utils
         public Action<object> postItemAction = (a) => { };
         public Func<object, object> itemAction = (a) => { return a; };
         IEnumerator IEnumerable.GetEnumerator() { return GetEnumerator(); }
+        public SimpleEnumerator(IEnumerator enumerator) {
+            this.enumerator = enumerator;
+        }
         public IEnumerator GetEnumerator()
         {
             prefixAction();

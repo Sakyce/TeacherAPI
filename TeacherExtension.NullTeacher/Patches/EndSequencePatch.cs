@@ -16,7 +16,7 @@ namespace NullTeacher.Patches
             IEnumerator GetEnumerator()
             {
                 // Copy pasted from CoreGameManager lmao
-                if (TeacherPlugin.GetTeachersOfType<NullTeacher>().Count() > 0)
+                if (TeacherManager.Instance.GetTeachersOfType<NullTeacher>().Count() > 0)
                 {
                     var nolives = __instance.lives < 1 && __instance.extraLives < 1;
                     float time = 0f;

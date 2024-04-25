@@ -101,7 +101,7 @@ namespace NullTeacher
         }
         public override TeacherState GetAngryState() => new Null_Chase(this);
         public override TeacherState GetHappyState() => new Null_Happy(this);
-
+        public override string GetNotebooksText(string amount) => $"{amount} Noteboos";
         public override void VirtualUpdate()
         {
             base.VirtualUpdate();
@@ -120,7 +120,7 @@ namespace NullTeacher
 
         public void OpenDoors()
         {
-            if (currentCell.doorHere)
+            if (currentCell != null && currentCell.doorHere)
             {
                 currentCell.doors.ForEach(d => d.OpenTimed(0.5f, false));
                 SpeechCheck(NullPhrase.Hide, 0.01f);

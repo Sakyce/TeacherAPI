@@ -7,9 +7,9 @@ namespace TeacherAPI.patches
     {
         internal static bool Prefix()
         {
-            if (TeacherPlugin.Instance.spawnedTeachers.Count > 0)
+            if (TeacherManager.Instance.spawnedTeachers.Count > 0)
             {
-                foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
+                foreach (var teacher in TeacherManager.Instance.spawnedTeachers)
                 {
                     teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.PlayerExitedSpawn());
                 }
@@ -21,39 +21,12 @@ namespace TeacherAPI.patches
         }
     }
 
-    [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.CollectNotebooks))]
-    internal class OnNotebookCollectedPatch
-    {
-        internal static void Postfix()
-        {
-            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
-            {
-                teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.NotebookCollected());
-            }
-        }
-    }
-
-    [HarmonyPatch(typeof(MainGameManager), nameof(MainGameManager.AllNotebooks))]
-    internal class OnAllNotebooksCollected
-    {
-        internal static void Postfix()
-        {
-            Singleton<CoreGameManager>.Instance.audMan.FlushQueue(true);
-            if (TeacherPlugin.Instance.spawnedTeachers.Count > 0)
-            {
-                foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
-                {
-                    teacher.OnAllNotebooksCollected();
-                }
-            }
-        }
-    }
     [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.PleaseBaldi))]
     internal class OnGoodMathMachineAnswer
     {
         internal static void Prefix()
         {
-            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers)
+            foreach (var teacher in TeacherManager.Instance.spawnedTeachers)
             {
                 teacher.behaviorStateMachine.currentState.AsTeacherState().IfSuccess(state => state.GoodMathMachineAnswer());
             }

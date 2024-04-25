@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 namespace TeacherAPI.patches
 {
+    [HarmonyPatch(typeof(GlobalCam), nameof(GlobalCam.Transition))]
+    internal class SkipTransition
+    {
+        internal static bool Prefix()
+        {
+            return !TeacherAPIConfiguration.DebugMode.Value;
+        }
+    }
+
     [HarmonyPatch(typeof(WarningScreen), "Start")]
     [HarmonyPriority(Priority.LowerThanNormal)] // Low priority, because MTMModdingAPI is supposed to be the first.
     internal class WarningScreenCustomText
@@ -49,8 +58,7 @@ If you encounter an error, send me the Logs!
                 __instance.textBox.SetText(text);
                 yield return new WaitForSeconds(4f);
                 preventAdvance = false;
-                Format(__instance.textBox.text + @"
-<alpha=#AA>PRESS {0} TO CONTINUE");
+                Format(__instance.textBox.text + "\n<alpha=#AA>PRESS {0} TO CONTINUE");
                 yield break;
             }
 

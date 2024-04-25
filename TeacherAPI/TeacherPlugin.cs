@@ -23,12 +23,12 @@ namespace TeacherAPI
     public class TeacherPlugin : BaseUnityPlugin
     {
         public static TeacherPlugin Instance { get; private set; }
-        public bool SpoopModeEnabled { get; internal set; }
 
         internal Dictionary<Character, NPC> whoAreTeachers = new Dictionary<Character, NPC>(); // Mostly used to differenciate who are teachers and who are not.
         internal Dictionary<LevelObject, Baldi> originalBaldiPerFloor = new Dictionary<LevelObject, Baldi>();
-        public List<Teacher> spawnedTeachers = new List<Teacher>();
         public Baldi currentBaldi;
+
+        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachersPerFloor = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
 
         public static ManualLogSource Log { get => Instance.Logger; }
 
@@ -60,20 +60,14 @@ namespace TeacherAPI
                 SceneManager.LoadScene("MainMenu");
             }
         }
-        internal static Baldi ConvertTeacherToBaldi(Baldi teacher)
-        {
-            return teacher;
-        }
         private void EditGenerator(string floorName, int floorNumber, LevelObject floorObject)
         {
-            if (floorObject.potentialBaldis.Length < 1)
+            if (floorObject.potentialBaldis.Length != 1)
             {
-                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("No potential baldi found. Possttttibly because of another mod that edit the teacher without using More Teachers API."));
+                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("There is no exactly one PotentialBaldi for this level. What mod did you have installed ?"));
             }
-            else if (floorObject.potentialBaldis.Length > 1)
-            {
-                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("More than one potential baldi found. Possibly because of another mod."));
-            }
+
+            potentialTeachersPerFloor.Add(floorObject, new List<WeightedSelection<Teacher>>());
 
             if (!TeacherAPIConfiguration.EnableBaldi.Value)
             {
@@ -99,18 +93,28 @@ namespace TeacherAPI
             }
             catch (ArgumentException) { }
         }
+
         internal Baldi GetPotentialBaldi(LevelObject floorObject)
         {
             var baldis = (from x in floorObject.potentialBaldis
                           where x.selection.GetType().Equals(typeof(Baldi))
                           select (Baldi)x.selection).ToArray();
-
             if (baldis.Length > 1)
             {
                 (from baldi in baldis select baldi.name).Print("Baldis", TeacherPlugin.Log);
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("Multiple Baldis found in the level!"));
             }
             return baldis.First();
+        }
+
+        /// <summary>
+        /// Make your teacher known to TeacherAPI
+        /// </summary>
+        /// <param name="teacher"></param>
+        public static void RegisterTeacher(Teacher teacher)
+        {
+            teacher.ignorePlayerOnSpawn = true; // Or else, the teacher won't spawn instantly.
+            Instance.whoAreTeachers.Add(teacher.Character, teacher);
         }
 
         /// <summary>
@@ -138,11 +142,6 @@ The name of the assets folder must be <color=red>{1}</color>.
             WarningScreenCustomText.ShowWarningScreen(text);
         }
 
-        public static T[] GetTeachersOfType<T>() where T : Teacher
-        {
-            return (from teacher in Instance.spawnedTeachers where teacher.GetType().Equals(typeof(T)) select (T)teacher).ToArray();
-        }
-
         /// <summary>
         /// Returns true if Infinite Floors/Endless Floors is loaded.
         /// </summary>
@@ -154,16 +153,6 @@ The name of the assets folder must be <color=red>{1}</color>.
                 where x.Key.Equals("mtm101.rulerp.baldiplus.endlessfloors")
                 select x.Key
             ).Count() > 0;
-        }
-
-        /// <summary>
-        /// Make your teacher known to TeacherAPI
-        /// </summary>
-        /// <param name="teacher"></param>
-        public static void RegisterTeacher(Teacher teacher)
-        {
-            teacher.ignorePlayerOnSpawn = true; // Or else, the teacher won't spawn instantly.
-            Instance.whoAreTeachers.Add(teacher.Character, teacher);
         }
 
         /// <summary>
