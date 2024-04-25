@@ -59,7 +59,6 @@ namespace TeacherAPI.patches
                         : teacher.GetHappyState()
                 );
                 teacher.HasInitialized = true;
-                Debug.Log($"Teacher {teacher.name} post initialized");
             }
         }
     }

@@ -72,7 +72,7 @@ If you encounter an error, send me the Logs!
         {
             if (TeacherAPIConfiguration.DisableAssetsWarningScreen.Value)
             {
-                Debug.LogError(text);
+                TeacherPlugin.Log.LogError(text);
                 return;
             }
 

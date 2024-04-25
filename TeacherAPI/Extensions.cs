@@ -43,7 +43,7 @@ namespace TeacherAPI
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"Handled InvalidCastException : Tried to cast {state} to Teacher State");
+                TeacherPlugin.Log.LogWarning($"Handled InvalidCastException : Tried to cast {state} to Teacher State");
                 promise.Fail(ex);
             }
             return promise;
