@@ -20,6 +20,8 @@ namespace TeacherAPI
         /// </summary>
         public bool disableNpcs = false;
 
+        internal bool HasInitialized { get; set; }
+
         // Overrides
         public override void Initialize()
         {

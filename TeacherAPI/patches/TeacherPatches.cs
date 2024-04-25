@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using System.Linq;
 using TeacherAPI.utils;
+using UnityEngine;
 
 namespace TeacherAPI.patches
 {
@@ -45,16 +46,21 @@ namespace TeacherAPI.patches
         }
     }
 
-    [HarmonyPatch(typeof(Teacher), nameof(Teacher.Initialize))] // Am I patching my own teachers ???
-    internal class ChangeStateAfterInitPatch
+    [HarmonyPatch(typeof(EnvironmentController), nameof(EnvironmentController.SpawnNPC))]
+    internal class ChangeStateAfterTeacherSpawn
     {
-        internal static void Postfix(Teacher __instance)
+        internal static void Postfix()
         {
-            __instance.behaviorStateMachine.ChangeState(
-                TeacherPlugin.Instance.SpoopModeEnabled
-                    ? __instance.GetAngryState()
-                    : __instance.GetHappyState()
-            );
+            foreach (var teacher in TeacherPlugin.Instance.spawnedTeachers.Where(x => !x.HasInitialized))
+            {
+                teacher.behaviorStateMachine.ChangeState(
+                    TeacherPlugin.Instance.SpoopModeEnabled
+                        ? teacher.GetAngryState()
+                        : teacher.GetHappyState()
+                );
+                teacher.HasInitialized = true;
+                Debug.Log($"Teacher {teacher.name} post initialized");
+            }
         }
     }
 
