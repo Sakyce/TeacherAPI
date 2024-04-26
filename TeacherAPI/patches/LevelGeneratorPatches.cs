@@ -14,22 +14,23 @@ namespace TeacherAPI.patches
             man.Initialize(__instance.ec, __instance.seed);
             TeacherPlugin.Instance.currentBaldi = TeacherPlugin.Instance.GetPotentialBaldi(__instance.ld);
 
-            object itemAction(object i)
+            object itemAction(object obj)
             {
-                if (man.MainTeacherPrefab != null) return i;
+                if (man.MainTeacherPrefab != null) return obj;
 
-                var controlledRng = new System.Random(__instance.seed);
-                man.MainTeacherPrefab = WeightedSelection<Teacher>.ControlledRandomSelection(TeacherPlugin.Instance.potentialTeachers[__instance.ld].ToArray(), controlledRng);
+                var rng = new System.Random(__instance.seed);
+                var i = WeightedSelection<Teacher>.ControlledRandomIndexList(TeacherPlugin.Instance.potentialTeachers[__instance.ld], rng);
+                man.MainTeacherPrefab = TeacherPlugin.Instance.potentialTeachers[__instance.ld][i].selection;
 
                 var potentialAssistants = TeacherPlugin.Instance.potentialAssistants[__instance.ld]
                     .Where(t => t.selection != man.MainTeacherPrefab)
                     .ToArray();
-                var assistant = WeightedSelection<Teacher>.ControlledRandomSelection(potentialAssistants, controlledRng);
+                var assistant = WeightedSelection<Teacher>.ControlledRandomSelection(potentialAssistants, rng);
                 man.assistingTeachersPrefabs.Add(assistant);
 
                 __instance.ld.potentialBaldis = new WeightedNPC[] { }; // Don't put anything in EC.NPCS, only secondary teachers can be there.
 
-                return i;
+                return obj;
             }
 
             void postfix()

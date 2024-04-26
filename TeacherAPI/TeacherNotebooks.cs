@@ -29,9 +29,8 @@ namespace TeacherAPI
         }
         public static WeightedTeacherNotebook GetRandom(WeightedTeacherNotebook[] weighteds, System.Random rng)
         {
-            // doesn't supports weights at the moment, BB+ WeightedSelection is probably broken
-            var next = rng.Next(weighteds.Count());
-            return weighteds[next];
+            var i = ControlledRandomIndex(weighteds, rng);
+            return weighteds[i];
         }
     }
     internal class TeacherNotebook : MonoBehaviour
