@@ -28,7 +28,8 @@ namespace TeacherAPI
         internal Dictionary<LevelObject, Baldi> originalBaldiPerFloor = new Dictionary<LevelObject, Baldi>();
         public Baldi currentBaldi;
 
-        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachersPerFloor = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
+        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachers = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
+        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialAssistants = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
 
         public static ManualLogSource Log { get => Instance.Logger; }
 
@@ -67,7 +68,8 @@ namespace TeacherAPI
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("There is no exactly one PotentialBaldi for this level. What mod did you have installed ?"));
             }
 
-            potentialTeachersPerFloor.Add(floorObject, new List<WeightedSelection<Teacher>>());
+            potentialTeachers.Add(floorObject, new List<WeightedSelection<Teacher>>());
+            potentialAssistants.Add(floorObject, new List<WeightedSelection<Teacher>>());
 
             if (!TeacherAPIConfiguration.EnableBaldi.Value)
             {
@@ -87,15 +89,18 @@ namespace TeacherAPI
                 }
             }
 
-            try
+            if (!originalBaldiPerFloor.ContainsKey(floorObject))
             {
                 originalBaldiPerFloor.Add(floorObject, GetPotentialBaldi(floorObject));
             }
-            catch (ArgumentException) { }
         }
 
         internal Baldi GetPotentialBaldi(LevelObject floorObject)
         {
+            if (floorObject.potentialBaldis.Count() <= 0)
+            {
+                return originalBaldiPerFloor[floorObject];
+            }
             var baldis = (from x in floorObject.potentialBaldis
                           where x.selection.GetType().Equals(typeof(Baldi))
                           select (Baldi)x.selection).ToArray();

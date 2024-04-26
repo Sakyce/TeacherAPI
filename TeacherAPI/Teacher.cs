@@ -21,6 +21,8 @@ namespace TeacherAPI
         public bool disableNpcs = false;
 
         internal bool HasInitialized { get; set; }
+        private TeacherManager teacherManager;
+        public TeacherManager TeacherManager { get => teacherManager; }
 
         // Overrides
         public override void Initialize()
@@ -42,6 +44,7 @@ namespace TeacherAPI
             speedMultiplier = baseBaldi.speedMultiplier;
             appleTime = baseBaldi.appleTime;
 
+            teacherManager = TeacherManager.Instance;
             TeacherManager.Instance.spawnedTeachers.Add(this);
         }
 
@@ -205,6 +208,15 @@ namespace TeacherAPI
                 Despawn();
             }
             ec.StartEventTimers();
+            foreach (var notebook in ec.notebooks)
+            {
+                var teacherNotebook = notebook.gameObject.GetComponent<TeacherNotebook>();
+                if (TeacherManager.MainTeacherPrefab.character != teacherNotebook.character)
+                {
+                    Debug.Log("unhide notebook");
+                    notebook.Hide(false);
+                }
+            }
         }
 
         /// <summary>
@@ -213,7 +225,11 @@ namespace TeacherAPI
         /// <param name="amount">The amount of notebook such as $"{current}/{max}", or just current in Endless</param>
         /// <returns>The text that shows up on the top left of the screen</returns>
         public virtual string GetNotebooksText(string amount) => $"{amount} {name.Replace("(Clone)", "")} Notebooks";
-        public virtual WeightedSelection<Teacher> GetTeacherNotebookWeight() => new WeightedSelection<Teacher>() { selection = this, weight = 100 };
+        public virtual WeightedTeacherNotebook GetTeacherNotebookWeight() => new WeightedTeacherNotebook(this);
+        public bool IsHelping()
+        {
+            return TeacherManager.SpawnedMainTeacher != this;
+        }
         public void ReplaceMusic(SoundObject snd)
         {
             StartCoroutine(ReplaceMusicDelay(snd));
@@ -224,6 +240,10 @@ namespace TeacherAPI
         }
         private IEnumerator ReplaceMusicDelay(SoundObject snd = null)
         {
+            if (IsHelping())
+            {
+                yield break;
+            }
             // Because the midi isn't playing immediatlely obviously very ugly hack pls help me
             Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Volume = 0;
             yield return new WaitForSeconds(0.05f);

@@ -71,6 +71,7 @@ namespace TeacherExtension.Foxo
             if (floorName.StartsWith("F") || floorName.StartsWith("END") || floorName.Equals("INF"))
             {
                 floorObject.AddPotentialTeacher(Foxo, FoxoConfiguration.Weight.Value);
+                floorObject.AddPotentialAssistingTeacher(Foxo, FoxoConfiguration.Weight.Value);
                 print($"Added Foxo to {floorName} (Floor {floorNumber})");
             }
         }

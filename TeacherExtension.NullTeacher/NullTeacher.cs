@@ -102,6 +102,7 @@ namespace NullTeacher
         public override TeacherState GetAngryState() => new Null_Chase(this);
         public override TeacherState GetHappyState() => new Null_Happy(this);
         public override string GetNotebooksText(string amount) => $"{amount} Noteboos";
+        public override WeightedTeacherNotebook GetTeacherNotebookWeight() => new WeightedTeacherNotebook(this).Weight(100);
         public override void VirtualUpdate()
         {
             base.VirtualUpdate();
@@ -341,6 +342,10 @@ namespace NullTeacher
         {
             base.Enter();
             noGllitchMat = Resources.FindObjectsOfTypeAll<Material>().FirstOrDefault(x => x.name == "SpriteStandard_Billboard_NoGlitch");
+            if (ohno.IsHelping())
+            {
+                ohno.transform.position = ohno.ec.elevators[0].transform.position;
+            }
             timer = ohno.Delay;
             ohno.ResetSlapDistance();
             ohno.spriteBase.SetActive(true);

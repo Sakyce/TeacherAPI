@@ -53,7 +53,7 @@ namespace NullTeacher
             if (floorname.StartsWith("F") || floorname.StartsWith("END") || floorname.Equals("INF"))
             {
                 ld.AddPotentialTeacher(NullTeacher, NullConfiguration.SpawnWeight.Value);
-                ld.forcedNpcs = ld.forcedNpcs.AddItem(NullTeacher).ToArray();
+                ld.AddPotentialAssistingTeacher(NullTeacher, NullConfiguration.SpawnWeight.Value);
                 print($"Added Null to {floorname} (Floor {floornumber})");
             }
         }

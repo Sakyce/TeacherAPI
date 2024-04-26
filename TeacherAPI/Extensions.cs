@@ -61,7 +61,20 @@ namespace TeacherAPI
         /// <param name="weight">The weight of the teacher for the selection (as a reference, MoreTeachers default teachers have a weight of 100)</param>
         public static void AddPotentialTeacher(this LevelObject levelObject, Teacher teacher, int weight)
         {
-            TeacherPlugin.Instance.potentialTeachersPerFloor[levelObject].Add(
+            TeacherPlugin.Instance.potentialTeachers[levelObject].Add(
+                new WeightedSelection<Teacher>() { selection = teacher, weight = weight }
+            );
+        }
+
+        /// <summary>
+        /// Adds your teacher into the pool of potential assisting teachers of the level.
+        /// </summary>
+        /// <param name="levelObject"></param>
+        /// <param name="teacher">The teacher to be added</param>
+        /// <param name="weight">The weight of the teacher for the selection (as a reference, MoreTeachers default teachers have a weight of 100)</param>
+        public static void AddPotentialAssistingTeacher(this LevelObject levelObject, Teacher teacher, int weight)
+        {
+            TeacherPlugin.Instance.potentialAssistants[levelObject].Add(
                 new WeightedSelection<Teacher>() { selection = teacher, weight = weight }
             );
         }

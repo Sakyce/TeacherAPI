@@ -1,28 +1,37 @@
 ﻿using HarmonyLib;
+using MTM101BaldAPI;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using TeacherAPI.utils;
 using UnityEngine;
 
 namespace TeacherAPI
 {
-    public class WeightedTeacherNotebook
+    public class WeightedTeacherNotebook : WeightedSelection<Teacher>
     {
-        public int weight = 100;
-        public Sprite sprite;
-        public Teacher teacher;
+        public Sprite[] sprites;
         public WeightedTeacherNotebook(Teacher teacher)
         {
-            this.teacher = teacher;
+            selection = teacher;
+            weight = 1;
         }
         public WeightedTeacherNotebook Weight(int weight)
         {
             this.weight = weight;
             return this;
         }
-        public WeightedTeacherNotebook Sprite(Sprite sprite)
+        public WeightedTeacherNotebook Sprite(params Sprite[] sprites)
         {
-            this.sprite = sprite;
+            this.sprites = sprites;
             return this;
+        }
+        public static WeightedTeacherNotebook GetRandom(WeightedTeacherNotebook[] weighteds, System.Random rng)
+        {
+            // doesn't supports weights at the moment, BB+ WeightedSelection is probably broken
+            var next = rng.Next(weighteds.Count());
+            return weighteds[next];
         }
     }
     internal class TeacherNotebook : MonoBehaviour
@@ -35,12 +44,26 @@ namespace TeacherAPI
             teacherMan = ec.gameObject.GetComponent<TeacherManager>();
             this.ec = ec;
 
-            var teacherPool = (from t in ec.npcsToSpawn
-                               where t.IsTeacher()
-                               select ((Teacher)t).GetTeacherNotebookWeight()).ToList();
-            teacherPool.Add(teacherMan.MainTeacherPrefab.GetTeacherNotebookWeight());
-            var s = WeightedSelection<Teacher>.ControlledRandomSelection(teacherPool.ToArray(), teacherMan.controlledRng);
-            character = s.Character;
+            var teacherPool = teacherMan.assistingTeachersPrefabs
+                .OfType<Teacher>()
+                .Select(t => t.GetTeacherNotebookWeight())
+                .AddItem(teacherMan.MainTeacherPrefab.GetTeacherNotebookWeight());
+
+            teacherPool
+                .Select(t => $"{t.selection} {t.weight}")
+                .Print("Teacher weight Notebooks", TeacherPlugin.Log);
+
+            var randomTeacher = WeightedTeacherNotebook.GetRandom(teacherPool.ToArray(), teacherMan.controlledRng);
+            character = randomTeacher.selection.Character;
+            print($"Selected {randomTeacher.selection.name} for {EnumExtensions.GetExtendedName<Character>((int)character)}");
+
+            var notebook = gameObject.GetComponent<Notebook>();
+            if (randomTeacher.sprites != null)
+            {
+                var i = teacherMan.controlledRng.Next(randomTeacher.sprites.Count());
+                notebook.sprite.sprite = randomTeacher.sprites[i];
+
+            }
 
             teacherMan.MaxTeachersNotebooks.TryGetValue(character, out int maxNotebooks);
             teacherMan.MaxTeachersNotebooks[character] = maxNotebooks + 1;
@@ -51,24 +74,31 @@ namespace TeacherAPI
             teacherMan.CurrentTeachersNotebooks[character] = currentNotebooks + 1;
 
             // Oh my god, am I drunk ?
-            teacherMan.spawnedTeachers.Where(t => t.Character == character).ToList().ForEach(t => t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected()));
+            teacherMan.spawnedTeachers
+                .Where(t => t.Character == character)
+                .ToList()
+                .ForEach(t => t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected()));
         }
 
         internal static void RefreshNotebookText()
         {
-            if (TeacherManager.Instance.spawnedTeachers.Count > 0)
+            var teacherMan = TeacherManager.Instance;
+            var teachers = new Teacher[] {}
+                .AddItem(teacherMan.MainTeacherPrefab)
+                .Concat(teacherMan.assistingTeachersPrefabs);
+
+            if (teachers.Count() > 0)
             {
                 var notebookText = "";
-                foreach (var teacher in TeacherManager.Instance.spawnedTeachers)
+                foreach (var teacher in teachers)
                 {
-                    TeacherManager.Instance.CurrentTeachersNotebooks.TryGetValue(teacher.Character, out int currentNotebooks);
-                    TeacherManager.Instance.MaxTeachersNotebooks.TryGetValue(teacher.Character, out int maxNotebooks);
+                    teacherMan.CurrentTeachersNotebooks.TryGetValue(teacher.Character, out int currentNotebooks);
+                    teacherMan.MaxTeachersNotebooks.TryGetValue(teacher.Character, out int maxNotebooks);
                     notebookText = notebookText + teacher.GetNotebooksText(
                             $"{currentNotebooks}/{maxNotebooks}"
                     ) + '\n';
                 }
-                CoreGameManager.Instance.GetHud(0).gameObject.GetComponent<RectTransform>().sizeDelta += new Vector2(300, 0);
-
+                CoreGameManager.Instance.GetHud(0).gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(500, 200);
                 CoreGameManager.Instance.GetHud(0).UpdateText(0, notebookText);
             }
         }
@@ -81,7 +111,6 @@ namespace TeacherAPI
         {
             var teacherNotebook = __instance.gameObject.AddComponent<TeacherNotebook>();
             teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
-            TeacherNotebook.RefreshNotebookText();
         }
     }
 

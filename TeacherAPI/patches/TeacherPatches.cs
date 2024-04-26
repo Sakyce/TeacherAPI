@@ -11,9 +11,9 @@ namespace TeacherAPI.patches
     {
         public static void Postfix(EnvironmentController __instance, ref Baldi __result)
         {
-            if (__result == null && TeacherManager.Instance.MainTeacher != null)
+            if (__result == null && TeacherManager.Instance.SpawnedMainTeacher != null)
             {
-                __result = (Baldi)TeacherManager.Instance.MainTeacher;
+                __result = (Baldi)TeacherManager.Instance.SpawnedMainTeacher;
             }
         }
     }
@@ -35,11 +35,15 @@ namespace TeacherAPI.patches
         {
             foreach (var teacher in TeacherManager.Instance.spawnedTeachers.Where(x => !x.HasInitialized))
             {
-                teacher.behaviorStateMachine.ChangeState(
-                    TeacherManager.Instance.SpoopModeActivated
-                        ? teacher.GetAngryState()
-                        : teacher.GetHappyState()
-                );
+                var mainTeacherPrefab = TeacherManager.Instance.MainTeacherPrefab;
+                if (mainTeacherPrefab != null && TeacherManager.Instance.SpawnedMainTeacher == null)
+                {
+                    if (mainTeacherPrefab.GetType().Equals(teacher.GetType()))
+                    {
+                        TeacherManager.Instance.SpawnedMainTeacher = teacher;
+                    }
+                }
+                teacher.behaviorStateMachine.ChangeState(teacher.GetHappyState());
                 teacher.HasInitialized = true;
             }
         }
@@ -57,11 +61,29 @@ namespace TeacherAPI.patches
             {
                 var happyBaldiPos = __instance.Ec.CellFromPosition(happyBaldi.transform.position).position;
                 __instance.Ec.SpawnNPC(teacherManager.MainTeacherPrefab, happyBaldiPos);
+                TeacherNotebook.RefreshNotebookText();
 
                 happyBaldi.sprite.enabled = false;
                 happyBaldi.audMan.enabled = false;
                 happyBaldi.audMan.disableSubtitles = true;
                 Singleton<MusicManager>.Instance.StopMidi();
+            }
+
+            foreach (var prefab in teacherManager.assistingTeachersPrefabs)
+            {
+                var cells = __instance.Ec.notebooks
+                    .Where(n => n.gameObject.GetComponent<TeacherNotebook>().character == prefab.Character)
+                    .Select(n => n.activity.room.RandomEntitySafeCellNoGarbage())
+                    .ToArray();
+                var i = teacherManager.controlledRng.Next(cells.Count());
+                __instance.Ec.SpawnNPC(prefab, cells[i].position);
+            }
+
+            foreach (var notebook in __instance.Ec.notebooks)
+            {
+                var teacherNotebook = notebook.gameObject.GetComponent<TeacherNotebook>();
+                if (teacherNotebook.character != teacherManager.MainTeacherPrefab.Character) 
+                    notebook.Hide(true);
             }
         }
 

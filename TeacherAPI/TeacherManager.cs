@@ -9,28 +9,24 @@ namespace TeacherAPI
 	{
 		internal Dictionary<Character, int> MaxTeachersNotebooks = new Dictionary<Character, int>();
 		internal Dictionary<Character, int> CurrentTeachersNotebooks = new Dictionary<Character, int>();
-		private EnvironmentController ec;
-		private List<Teacher> assistingTeachers = new List<Teacher>();
-		internal List<Teacher> spawnedTeachers = new List<Teacher>();
-		internal System.Random controlledRng;
 
-		public Teacher MainTeacher { get; private set; }
+		internal List<Teacher> spawnedTeachers = new List<Teacher>(); // Every teachers spawned
+		public Teacher SpawnedMainTeacher { get; internal set; } // First teacher that has spawned
 		internal Teacher MainTeacherPrefab { get; set; } // This will be used to SpawnNPC to HappyBaldi position
+		
+		internal List<Teacher> assistingTeachersPrefabs = new List<Teacher>(); // Used only for the notebooks rn
+
+        internal System.Random controlledRng;
+		
 		public static TeacherManager Instance { get; private set; }
 		public bool SpoopModeActivated { get; internal set; }
 		public bool IsBaldiMainTeacher { get; internal set; }
+		public EnvironmentController Ec { get; private set; }
 		public void Initialize(EnvironmentController ec, int seed)
 		{
 			Instance = this;
-			this.ec = ec;
+			Ec = ec;
             controlledRng = new System.Random(seed);
-		}
-		internal void SpawnHappyTeacher(Teacher teacher)
-		{
-			if (MainTeacher == null)
-			{
-				MainTeacher = teacher;
-			}
 		}
 
 		public T[] GetTeachersOfType<T>() where T : Teacher
@@ -40,19 +36,11 @@ namespace TeacherAPI
 							select (T)teacher).ToArray();
 		}
 
-		internal void CollectNotebook(Character character)
-		{
-			CurrentTeachersNotebooks.TryGetValue(character, out int val);
-			CurrentTeachersNotebooks.Remove(character);
-			CurrentTeachersNotebooks.Add(character, val + 1);
-
-		}
-
 		internal void DoIfMainTeacher(Action<Teacher> action)
 		{
-			if (MainTeacher != null)
+			if (SpawnedMainTeacher != null)
 			{
-				action.Invoke(MainTeacher);
+				action.Invoke(SpawnedMainTeacher);
 			}
 		}
 	}
