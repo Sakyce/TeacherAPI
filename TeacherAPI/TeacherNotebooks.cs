@@ -37,8 +37,8 @@ namespace TeacherAPI
     internal class TeacherNotebook : MonoBehaviour
     {
         public Character character;
-        private EnvironmentController ec;
-        private TeacherManager teacherMan;
+        public EnvironmentController ec;
+        public TeacherManager teacherMan;
         internal void Initialize(EnvironmentController ec)
         {
             teacherMan = ec.gameObject.GetComponent<TeacherManager>();
@@ -62,7 +62,6 @@ namespace TeacherAPI
             {
                 var i = teacherMan.controlledRng.Next(randomTeacher.sprites.Count());
                 notebook.sprite.sprite = randomTeacher.sprites[i];
-
             }
 
             teacherMan.MaxTeachersNotebooks.TryGetValue(character, out int maxNotebooks);
@@ -109,8 +108,36 @@ namespace TeacherAPI
     {
         internal static void Postfix(Notebook __instance)
         {
+            if (__instance.gameObject.GetComponent<TeacherNotebook>() != null)
+            {
+                return;
+            }
             var teacherNotebook = __instance.gameObject.AddComponent<TeacherNotebook>();
             teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
+        }
+    }
+
+    [HarmonyPatch(typeof(Activity), nameof(Activity.SetNotebook))]
+    internal static class AttachTeacherNotebookToActivity
+    {
+        internal static void Postfix(Activity __instance, Notebook val)
+        {
+            var teacherNotebook = val.gameObject.AddComponent<TeacherNotebook>();
+            teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
+        }
+    }
+    [HarmonyPatch(typeof(MathMachine), nameof(MathMachine.NumberClicked))]
+    internal static class PreventMathMachinesFromBeingSolved
+    {
+        internal static bool Prefix(MathMachine __instance)
+        {
+            var teacherNotebook = __instance.notebook.gameObject.GetComponent<TeacherNotebook>();
+            if (!teacherNotebook.teacherMan.SpoopModeActivated && teacherNotebook.character != teacherNotebook.teacherMan.MainTeacherPrefab.Character)
+            {
+                __instance.audMan.PlaySingle(__instance.audLose);
+                return false;
+            }
+            return true;
         }
     }
 
