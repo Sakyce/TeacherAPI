@@ -22,38 +22,38 @@ namespace TeacherExtension.Foxo
         public static void LoadAssets()
         {
             var PIXELS_PER_UNIT = 30f;
-            sprites.Add<Sprite[]>(
+            sprites.Add(
                 "Wave",
                 TeacherPlugin
                     .TexturesFromMod(FoxoPlugin.Instance, "wave/Foxo_Wave{0:0000}.png", (0, 49))
                     .ToSprites(PIXELS_PER_UNIT)
             );
-            sprites.Add<Sprite[]>(
+            sprites.Add(
                 "Slap",
                 TeacherPlugin
                     .TexturesFromMod(FoxoPlugin.Instance, "slap{0}.png", (1, 4))
                     .ToSprites(PIXELS_PER_UNIT)
             );
-            sprites.Add<Sprite[]>(
+            sprites.Add(
                 "Sprayed",
                 TeacherPlugin
                     .TexturesFromMod(FoxoPlugin.Instance, "spray{0}.png", (1, 2))
                     .ToSprites(PIXELS_PER_UNIT)
             );
-            sprites.Add<Sprite[]>(
+            sprites.Add(
                 "Wrath",
                 TeacherPlugin
                     .TexturesFromMod(FoxoPlugin.Instance, "wrath{0}.png", (1, 3))
                     .ToSprites(PIXELS_PER_UNIT)
             );
-            sprites.Add<Sprite>(
+            sprites.Add(
                 "Stare",
                 AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(FoxoPlugin.Instance, "stare.png"), PIXELS_PER_UNIT)
             );
-            sprites.Add<Sprite>(
+            sprites.Add(
                 "Notebook",
-                AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(FoxoPlugin.Instance, "notebook.png"), 60f)
-                );
+                TeacherPlugin.TexturesFromMod(FoxoPlugin.Instance, "*.png", "comics").ToSprites(20f)
+            );
 
             // Shortcut functions
             AudioClip Clip(string path) => AssetLoader.AudioClipFromMod(FoxoPlugin.Instance, "audio", path);
@@ -116,7 +116,7 @@ namespace TeacherExtension.Foxo
         public override TeacherState GetHappyState() => forceWrath ? (Foxo_StateBase)(new Foxo_WrathHappy(this)) : new Foxo_Happy(this);
         public override string GetNotebooksText(string amount) => $"{amount} Foxo Comics";
         public override WeightedTeacherNotebook GetTeacherNotebookWeight()
-            => new WeightedTeacherNotebook(this).Weight(80).Sprite(sprites.Get<Sprite>("Notebook"));
+            => new WeightedTeacherNotebook(this).Weight(80).Sprite(sprites.Get<Sprite[]>("Notebook"));
         // Only play visual/audio effects, doesn't actually moves
         public new void SlapNormal()
         {

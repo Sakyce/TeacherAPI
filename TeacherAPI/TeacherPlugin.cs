@@ -176,5 +176,29 @@ The name of the assets folder must be <color=red>{1}</color>.
             }
             return textures.ToArray();
         }
+        /// <summary>
+        /// Will be deprecated once MTM101BMDE 4.0 releases
+        /// </summary>
+        public static Texture2D[] TexturesFromFolder(string path, string search = "*.png")
+        {
+            string[] paths = Directory.GetFiles(Path.Combine(path), search);
+            Texture2D[] textures = new Texture2D[paths.Length];
+            for (int i = 0; i < paths.Length; i++)
+            {
+                textures[i] = AssetLoader.TextureFromFile(paths[i]);
+            }
+            return textures;
+        }
+
+        /// <summary>
+        /// Will be deprecated once MTM101BMDE 4.0 releases
+        /// </summary>
+        public static Texture2D[] TexturesFromMod(BaseUnityPlugin plugin, string search, params string[] paths)
+        {
+            List<string> pathz = paths.ToList();
+            pathz.Insert(0, AssetLoader.GetModPath(plugin));
+            return TexturesFromFolder(Path.Combine(pathz.ToArray()), search);
+        }
+
     }
 }
