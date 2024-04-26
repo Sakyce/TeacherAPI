@@ -37,6 +37,7 @@ namespace TeacherAPI
     internal class TeacherNotebook : MonoBehaviour
     {
         public Character character;
+        private Sprite[] sprites;
         public EnvironmentController ec;
         public TeacherManager teacherMan;
         internal void Initialize(EnvironmentController ec)
@@ -55,6 +56,7 @@ namespace TeacherAPI
 
             var randomTeacher = WeightedTeacherNotebook.GetRandom(teacherPool.ToArray(), teacherMan.controlledRng);
             character = randomTeacher.selection.Character;
+            sprites = randomTeacher.sprites;
             print($"Selected {randomTeacher.selection.name} for {EnumExtensions.GetExtendedName<Character>((int)character)}");
 
             var notebook = gameObject.GetComponent<Notebook>();
@@ -63,9 +65,19 @@ namespace TeacherAPI
                 var i = teacherMan.controlledRng.Next(randomTeacher.sprites.Count());
                 notebook.sprite.sprite = randomTeacher.sprites[i];
             }
+            SetNotebookTexture();
 
             teacherMan.MaxTeachersNotebooks.TryGetValue(character, out int maxNotebooks);
             teacherMan.MaxTeachersNotebooks[character] = maxNotebooks + 1;
+        }
+        internal void SetNotebookTexture()
+        {
+            if (sprites != null)
+            {
+                var notebook = gameObject.GetComponent<Notebook>();
+                var i = teacherMan.controlledRng.Next(sprites.Count());
+                notebook.sprite.sprite = sprites[i];
+            }
         }
         internal void OnCollect()
         {
@@ -126,6 +138,7 @@ namespace TeacherAPI
             teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
         }
     }
+
     [HarmonyPatch(typeof(MathMachine), nameof(MathMachine.NumberClicked))]
     internal static class PreventMathMachinesFromBeingSolved
     {
@@ -140,6 +153,18 @@ namespace TeacherAPI
             return true;
         }
     }
+
+    // Fixes the texture of the notebook being overwritten by defaults when spawning from math machine
+    [HarmonyPatch(typeof(Notebook), nameof(Notebook.Start))]
+    internal static class SetNotebookTextureOnStart 
+    {
+        internal static void Postfix(Notebook __instance)
+        {
+            var teacherNotebook = __instance.gameObject.GetComponent<TeacherNotebook>();
+            teacherNotebook.SetNotebookTexture();
+        }
+    }
+
 
     [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.CollectNotebook))]
     internal static class CollectTeacherNotebook
