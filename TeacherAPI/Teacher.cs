@@ -228,7 +228,7 @@ namespace TeacherAPI
         public virtual WeightedTeacherNotebook GetTeacherNotebookWeight() => new WeightedTeacherNotebook(this);
         public bool IsHelping()
         {
-            return TeacherManager.SpawnedMainTeacher != this;
+            return TeacherManager.MainTeacherPrefab.Character != this.Character;
         }
         public void ReplaceMusic(SoundObject snd)
         {

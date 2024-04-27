@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using MTM101BaldAPI.AssetTools;
 using System;
 using System.Linq;
 using TeacherAPI.utils;
@@ -77,6 +78,11 @@ namespace TeacherAPI
             TeacherPlugin.Instance.potentialAssistants[levelObject].Add(
                 new WeightedSelection<Teacher>() { selection = teacher, weight = weight }
             );
+        }
+
+        public static Sprite ToSprite(this Texture2D tex, float pixelsPerUnit)
+        {
+            return AssetLoader.SpriteFromTexture2D(tex, pixelsPerUnit);
         }
     }
 }

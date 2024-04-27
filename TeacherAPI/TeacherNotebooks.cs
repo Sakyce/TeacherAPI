@@ -12,6 +12,8 @@ namespace TeacherAPI
     public class WeightedTeacherNotebook : WeightedSelection<Teacher>
     {
         public Sprite[] sprites;
+        public SoundObject sound;
+
         public WeightedTeacherNotebook(Teacher teacher)
         {
             selection = teacher;
@@ -27,6 +29,11 @@ namespace TeacherAPI
             this.sprites = sprites;
             return this;
         }
+        public WeightedTeacherNotebook CollectSound(SoundObject sound)
+        {
+            this.sound = sound;
+            return this;
+        }
         public static WeightedTeacherNotebook GetRandom(WeightedTeacherNotebook[] weighteds, System.Random rng)
         {
             var i = ControlledRandomIndex(weighteds, rng);
@@ -39,6 +46,8 @@ namespace TeacherAPI
         private Sprite[] sprites;
         public EnvironmentController ec;
         public TeacherManager teacherMan;
+        private SoundObject sound;
+
         internal void Initialize(EnvironmentController ec)
         {
             teacherMan = ec.gameObject.GetComponent<TeacherManager>();
@@ -64,6 +73,10 @@ namespace TeacherAPI
                 var i = teacherMan.controlledRng.Next(randomTeacher.sprites.Count());
                 notebook.sprite.sprite = randomTeacher.sprites[i];
             }
+            if (randomTeacher.sound != null)
+            {
+                sound = randomTeacher.sound;
+            }
             SetNotebookTexture();
 
             teacherMan.MaxTeachersNotebooks.TryGetValue(character, out int maxNotebooks);
@@ -83,13 +96,19 @@ namespace TeacherAPI
             teacherMan.CurrentTeachersNotebooks.TryGetValue(character, out int currentNotebooks);
             teacherMan.CurrentTeachersNotebooks[character] = currentNotebooks + 1;
 
+            teacherMan.MaxTeachersNotebooks.TryGetValue(character, out int maxNotebooks);
+            if (sound != null)
+            {
+                ec.audMan.PlaySingle(sound);
+            }
+
             // Oh my god, am I drunk ?
             teacherMan.spawnedTeachers
                 .Where(t => t.Character == character)
                 .ToList()
                 .ForEach(t =>
                 {
-                    t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected());
+                    t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected(currentNotebooks + 1, maxNotebooks));
                     t.GetAngry(BaseGameManager.Instance.NotebookAngerVal);
                 });
         }

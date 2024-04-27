@@ -11,7 +11,7 @@
         /// <summary>
         /// Avoid using this to add anger to your Teacher
         /// </summary>
-        public virtual void NotebookCollected()
+        public virtual void NotebookCollected(int currentNotebooks, int maxNotebooks)
         {
 
         }

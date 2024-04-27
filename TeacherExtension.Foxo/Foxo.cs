@@ -3,6 +3,7 @@ using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
 using System.Collections;
 using System.Linq;
+using System.Reflection;
 using TeacherAPI;
 using TeacherAPI.utils;
 using UnityEngine;
@@ -64,20 +65,20 @@ namespace TeacherExtension.Foxo
                 return snd;
             };
 
-            audios.Add("boing", ObjectCreators.CreateSoundObject(Clip("boing.wav"), "* Boing! *", SoundType.Effect, Color.white));
-            audios.Add("ding", ObjectCreators.CreateSoundObject(Clip("ding.wav"), "* Ding! *", SoundType.Effect, Color.white));
+            audios.Add("boing", ObjectCreators.CreateSoundObject(Clip("boing.wav"), "* Boing! *", SoundType.Effect, Color.yellow));
+            audios.Add("ding", ObjectCreators.CreateSoundObject(Clip("ding.wav"), "* Ding! *", SoundType.Effect, Color.yellow));
             audios.Add("school", NoSubtitle(Clip("school2.wav"), SoundType.Music));
-            audios.Add("hellothere", ObjectCreators.CreateSoundObject(Clip("hellothere.wav"), "Hello there! Welcome to my Fun Schoolhouse.", SoundType.Voice, Color.white));
-            audios.Add("slap", ObjectCreators.CreateSoundObject(Clip("slap.wav"), "* Slap! *", SoundType.Effect, Color.white));
-            audios.Add("slap2", ObjectCreators.CreateSoundObject(Clip("slap2.wav"), "...", SoundType.Effect, Color.white));
+            audios.Add("hellothere", ObjectCreators.CreateSoundObject(Clip("hellothere.wav"), "Hello there! Welcome to my Fun Schoolhouse.", SoundType.Voice, Color.yellow));
+            audios.Add("slap", ObjectCreators.CreateSoundObject(Clip("slap.wav"), "* Slap! *", SoundType.Effect, Color.yellow));
+            audios.Add("slap2", ObjectCreators.CreateSoundObject(Clip("slap2.wav"), "...", SoundType.Effect, Color.yellow));
             audios.Add("scare", NoSubtitle(Clip("scare.wav"), SoundType.Effect));
-            audios.Add("scream", ObjectCreators.CreateSoundObject(Clip("scream.wav"), "micheal p scream", SoundType.Voice, Color.white));
+            audios.Add("scream", ObjectCreators.CreateSoundObject(Clip("scream.wav"), "micheal p scream", SoundType.Voice, Color.yellow));
             audios.Add("wrath", NoSubtitle(Clip("wrath.wav"), SoundType.Music));
             audios.Add("fear", NoSubtitle(Clip("fear.wav"), SoundType.Effect));
 
             audios.Add("praise", new SoundObject[] {
-                                ObjectCreators.CreateSoundObject(Clip("praise1.wav"), "Great job, that's great!", SoundType.Voice, Color.white),
-                                ObjectCreators.CreateSoundObject(Clip("praise2.wav"), "I think you are smarter than me!", SoundType.Voice, Color.white),
+                                ObjectCreators.CreateSoundObject(Clip("praise1.wav"), "Great job, that's great!", SoundType.Voice, Color.yellow),
+                                ObjectCreators.CreateSoundObject(Clip("praise2.wav"), "I think you are smarter than me!", SoundType.Voice, Color.yellow),
                         });
         }
         public override void Initialize()
@@ -218,9 +219,9 @@ namespace TeacherExtension.Foxo
             foxo.ReplaceMusic(Foxo.audios.Get<SoundObject>("school"));
         }
 
-        public override void NotebookCollected()
+        public override void NotebookCollected(int currentNotebooks, int maxNotebooks)
         {
-            base.NotebookCollected();
+            base.NotebookCollected(currentNotebooks, maxNotebooks);
             if (foxo.IsHelping())
             {
                 foxo.ActivateSpoopMode();
@@ -361,9 +362,9 @@ namespace TeacherExtension.Foxo
             foxo.ec.standardDarkLevel = Color.black;
             foxo.spriteBase.SetActive(true);
         }
-        public override void NotebookCollected()
+        public override void NotebookCollected(int c, int m)
         {
-            base.NotebookCollected();
+            base.NotebookCollected(c, m);
             foxo.ActivateSpoopMode();
             foxo.behaviorStateMachine.ChangeState(new Foxo_Wrath(foxo));
         }
