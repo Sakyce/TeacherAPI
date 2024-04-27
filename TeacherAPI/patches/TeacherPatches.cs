@@ -53,6 +53,7 @@ namespace TeacherAPI.patches
     {
         internal static void ReplaceHappyBaldi(BaseGameManager __instance)
         {
+            if (TeacherManager.DefaultBaldiEnabled) return;
             var happyBaldi = __instance.Ec.gameObject.GetComponentInChildren<HappyBaldi>();
             var teacherManager = __instance.Ec.gameObject.GetComponent<TeacherManager>();
 
@@ -103,17 +104,6 @@ namespace TeacherAPI.patches
             {
                 ReplaceHappyBaldi(__instance);
             }
-        }
-    }
-
-
-    [HarmonyPatch(typeof(BaseGameManager), nameof(BaseGameManager.AngerBaldi))]
-    internal class AngerBaldiPatch
-    {
-        public static void Postfix(ref float val)
-        {
-            var val2 = val;
-            TeacherManager.Instance.DoIfMainTeacher(t => t.GetAngry(val2));
         }
     }
 

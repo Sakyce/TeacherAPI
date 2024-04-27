@@ -87,16 +87,21 @@ namespace TeacherAPI
             teacherMan.spawnedTeachers
                 .Where(t => t.Character == character)
                 .ToList()
-                .ForEach(t => t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected()));
+                .ForEach(t =>
+                {
+                    t.behaviorStateMachine.CurrentState.AsTeacherState(e => e.NotebookCollected());
+                    t.GetAngry(BaseGameManager.Instance.NotebookAngerVal);
+                });
         }
 
         internal static void RefreshNotebookText()
         {
+            if (TeacherManager.DefaultBaldiEnabled) return;
             var teacherMan = TeacherManager.Instance;
             var teachers = new Teacher[] {}
                 .AddItem(teacherMan.MainTeacherPrefab)
                 .Concat(teacherMan.assistingTeachersPrefabs);
-
+            
             if (teachers.Count() > 0)
             {
                 var notebookText = "";
@@ -119,10 +124,8 @@ namespace TeacherAPI
     {
         internal static void Postfix(Notebook __instance)
         {
-            if (__instance.gameObject.GetComponent<TeacherNotebook>() != null)
-            {
-                return;
-            }
+            if (TeacherManager.DefaultBaldiEnabled) return;
+            if (__instance.gameObject.GetComponent<TeacherNotebook>() != null) return;
             var teacherNotebook = __instance.gameObject.AddComponent<TeacherNotebook>();
             teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
         }
@@ -133,6 +136,7 @@ namespace TeacherAPI
     {
         internal static void Postfix(Activity __instance, Notebook val)
         {
+            if (TeacherManager.DefaultBaldiEnabled) return;
             var teacherNotebook = val.gameObject.AddComponent<TeacherNotebook>();
             teacherNotebook.Initialize(BaseGameManager.Instance.Ec);
         }
@@ -143,6 +147,7 @@ namespace TeacherAPI
     {
         internal static bool Prefix(MathMachine __instance)
         {
+            if (TeacherManager.DefaultBaldiEnabled) return true;
             var teacherNotebook = __instance.notebook.gameObject.GetComponent<TeacherNotebook>();
             if (!teacherNotebook.teacherMan.SpoopModeActivated && teacherNotebook.character != teacherNotebook.teacherMan.MainTeacherPrefab.Character)
             {
@@ -159,6 +164,7 @@ namespace TeacherAPI
     {
         internal static void Postfix(Notebook __instance)
         {
+            if (TeacherManager.DefaultBaldiEnabled) return;
             var teacherNotebook = __instance.gameObject.GetComponent<TeacherNotebook>();
             teacherNotebook.SetNotebookTexture();
         }
@@ -170,6 +176,7 @@ namespace TeacherAPI
     {
         internal static void Postfix(BaseGameManager __instance, ref Notebook notebook)
         {
+            if (TeacherManager.DefaultBaldiEnabled) return;
             var teacherNotebook = notebook.gameObject.GetComponent<TeacherNotebook>();
             teacherNotebook.OnCollect();
             TeacherNotebook.RefreshNotebookText(); // Maybe possible to remove that

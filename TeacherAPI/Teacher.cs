@@ -123,6 +123,7 @@ namespace TeacherAPI
         /// <param name="text"></param>
         public void ReplaceEventText<RandomEvent>(string text) where RandomEvent : global::RandomEvent
         {
+            if (TeacherManager.MainTeacherPrefab.character != Character) return;
             var events = ec.gameObject.GetComponentsInChildren<RandomEvent>();
             foreach (var randomEvent in events)
             {
@@ -213,7 +214,6 @@ namespace TeacherAPI
                 var teacherNotebook = notebook.gameObject.GetComponent<TeacherNotebook>();
                 if (TeacherManager.MainTeacherPrefab.character != teacherNotebook.character)
                 {
-                    Debug.Log("unhide notebook");
                     notebook.Hide(false);
                 }
             }

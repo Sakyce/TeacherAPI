@@ -2,10 +2,22 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <IsPackable>false</IsPackable>
 
     <!-- Avoid ID conflicts with the package project. -->
     <PackageId>*$(MSBuildProjectFile)*</PackageId>
+
+
+    <!-- Packaging for Nuget so you can easily require my API! -->
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>Sakyce.TeacherAPI.Analyzers</PackageId>
+    <Title>TeacherAPI for Baldi's Basics Plus</Title>
+    <Version>0.0.5</Version>
+    <Description>Library that helps you to add more Teachers to Baldi's Basics Plus</Description>
+    <Copyright>GNU GPLv3</Copyright>
+    <PackageProjectUrl>https://discord.gg/75ykaFd6sB</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Sakyce/TeacherAPI.git</RepositoryUrl>
+    <PackageTags>baldi baldiplus bepinex</PackageTags>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

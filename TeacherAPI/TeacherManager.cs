@@ -18,6 +18,7 @@ namespace TeacherAPI
 
         internal System.Random controlledRng;
 		
+		public static bool DefaultBaldiEnabled { get; internal set; }
 		public static TeacherManager Instance { get; private set; }
 		public bool SpoopModeActivated { get; internal set; }
 		public bool IsBaldiMainTeacher { get; internal set; }
@@ -43,5 +44,35 @@ namespace TeacherAPI
 				action.Invoke(SpawnedMainTeacher);
 			}
 		}
+
+		public bool ContainsRealBaldi()
+		{
+            foreach (var baldi in Ec.npcs)
+            {
+                if (baldi.Character == Character.Baldi)
+                {
+                    return true;
+                }
+            }
+            foreach (var baldi in Ec.npcsToSpawn)
+            {
+                if (baldi.Character == Character.Baldi)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+		public Baldi GetRealBaldi()
+		{
+            foreach (var baldi in Ec.npcs)
+            {
+                if (baldi.Character == Character.Baldi)
+				{
+					return (Baldi)baldi;
+				}
+            }
+			return null;
+        }
 	}
 }

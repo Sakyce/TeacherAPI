@@ -17,6 +17,12 @@ namespace TeacherAPI.patches
             object itemAction(object obj)
             {
                 if (man.MainTeacherPrefab != null) return obj;
+                if (TeacherPlugin.Instance.potentialTeachers[__instance.ld].Count <= 0)
+                {
+                    TeacherManager.DefaultBaldiEnabled = true;
+                    return obj;
+                };
+                TeacherManager.DefaultBaldiEnabled = false;
 
                 var rng = new System.Random(__instance.seed);
                 var i = WeightedSelection<Teacher>.ControlledRandomIndexList(TeacherPlugin.Instance.potentialTeachers[__instance.ld], rng);
@@ -25,8 +31,10 @@ namespace TeacherAPI.patches
                 var potentialAssistants = TeacherPlugin.Instance.potentialAssistants[__instance.ld]
                     .Where(t => t.selection != man.MainTeacherPrefab)
                     .ToArray();
-                var assistant = WeightedSelection<Teacher>.ControlledRandomSelection(potentialAssistants, rng);
-                man.assistingTeachersPrefabs.Add(assistant);
+                if (potentialAssistants.Length > 0) {
+                    var assistant = WeightedSelection<Teacher>.ControlledRandomSelection(potentialAssistants, rng);
+                    man.assistingTeachersPrefabs.Add(assistant);
+                }
 
                 __instance.ld.potentialBaldis = new WeightedNPC[] { }; // Don't put anything in EC.NPCS, only secondary teachers can be there.
 
@@ -35,6 +43,7 @@ namespace TeacherAPI.patches
 
             void postfix()
             {
+                if (TeacherManager.DefaultBaldiEnabled) return;
                 var controlledRng = new System.Random(__instance.seed);
                 __instance.Ec.offices
                     .ForEach(office => __instance.Ec.BuildPosterInRoom(office, man.MainTeacherPrefab.Poster, controlledRng));
