@@ -21,7 +21,7 @@ If you want to already start with something, you can fork this [Example Teacher]
 
 > [!WARNING]  
 > We don't provide support for poor compatibility with proprietary/closed-source/poorly coded mods like Sugaku Modpack.
-> We also don't provide support for outdated mods.
+> We also don't provide support for outdated mods or mods marked as imcompatible.
 
 If you have a Github Account, report the issue as usual. Although, we require you to do these steps first:
 
@@ -34,10 +34,11 @@ WriteUnityLog = true
 Enabled = true
 ```
 
-2. Attach a screenshot the full console window with the logs in it.
-![image](https://github.com/Sakyce/TeacherAPI/assets/55030860/1c016ff1-8f36-4669-adb5-96e5d5d5598c)
+2. Attach a screenshot the full console window with the logs in it. ![image](https://github.com/Sakyce/TeacherAPI/assets/55030860/1c016ff1-8f36-4669-adb5-96e5d5d5598c)
 
-3. Attach the LogOutput file from `BepInEx/LogOutput.log`. If you think the issue is from somewhere else, avoid posting first. Make that an error like this will actually appear in the file: (please note that the error doesn't come from TeacherAPI or its associated mods in this example)
+3. Attach a screenshot of the plugins folder like this: ![image](https://github.com/Sakyce/TeacherAPI/assets/55030860/874de35e-e3c1-424a-9d3f-06e1de870214)
+
+4. Attach the LogOutput file from `BepInEx/LogOutput.log`. If you think the issue is from somewhere else, avoid posting first. Make that an error like this will actually appear in the file: (please note that the error doesn't come from TeacherAPI or its associated mods in this example). Don't send a screenshot of the 
 ```
 [Error  : Unity Log] ArgumentException: The Object you want to instantiate is null.
 Stack trace:
@@ -55,7 +56,7 @@ MTM101BaldAPI.<ReloadScenes>d__19:MoveNext()
 UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
 ```
 
-4. If you don't follow these steps correctly, your issue will be closed as not completed without any explaination.
+5. If you don't follow these steps correctly, your issue will be closed as not completed without any explaination.
 
 If you don't have Github, you can report it in the appropriate channel in the [Official Discord Guild](https://discord.gg/75ykaFd6sB), still do the same steps as mentionned earlier or Baldi will get angry.
 
