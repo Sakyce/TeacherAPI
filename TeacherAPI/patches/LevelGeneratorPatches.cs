@@ -26,7 +26,7 @@ namespace TeacherAPI.patches
                 };
                 TeacherManager.DefaultBaldiEnabled = false;
 
-                var rng = new System.Random(seed);
+                var rng = new System.Random(seed + TeacherPlugin.Instance.floorNumbers[__instance.ld]);
 
                 var mainTeacher = WeightedSelection<Teacher>.ControlledRandomSelectionList(TeacherPlugin.Instance.potentialTeachers[__instance.ld], rng);
                 man.MainTeacherPrefab = mainTeacher;
