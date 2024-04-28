@@ -3,6 +3,8 @@
 
 Please don't publish the mods you have made with the API as long as TeacherAPI 0.1.0 is not released on GameBanana.
 
+Right now, there is no official builds of Teacher Extensions on Gamebanana. Although, you can find preview builds on the [Discord](https://discord.gg/75ykaFd6sB).
+
 ## Installation Tutorial
 Using NuGet, add your package in your csproj. Right click on Dependencies > Manage NuGet Packages and install the last version.
 ![image](https://github.com/Sakyce/TeacherAPI/assets/55030860/262c5c14-4b3d-4cd3-949c-cdb760cb8ca0)
@@ -14,6 +16,9 @@ You can also add this as a PackageReference if you can't figure it out in your c
 ```
 
 If you want to already start with something, you can fork this [Example Teacher](https://github.com/Sakyce/TeacherExample) and create your own Teacher from it. (Very recommended!)
+
+> [!WARNING]
+> Only use the NuGet package for adding TeacherAPI as a dependency, don't add the dll as a dependency as it's considered bad practice!
 
 ## Good practices
 * Include options to disable your teacher as main, and disable your teacher as assistant, as well as tweaking weights.
