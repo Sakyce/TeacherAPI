@@ -64,7 +64,7 @@ namespace TeacherAPI
             Singleton<CoreGameManager>.Instance.GetCamera(0).offestPos += caughtOffset;
         }
 
-        // Virtuals
+        [Obsolete("Use TeacherState.NotebookCollected(int currentNotebooks, int maxNotebooks) instead.")]
         public virtual void OnAllNotebooksCollected()
         {
 
