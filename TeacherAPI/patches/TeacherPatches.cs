@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
+using MTM101BaldAPI;
+using System;
 using System.Linq;
-using TeacherAPI.utils;
-using UnityEngine;
 
 namespace TeacherAPI.patches
 {
@@ -70,6 +70,7 @@ namespace TeacherAPI.patches
                 Singleton<MusicManager>.Instance.StopMidi();
             }
 
+            
             foreach (var prefab in teacherManager.assistingTeachersPrefabs)
             {
                 var cells = __instance.Ec.notebooks
@@ -77,7 +78,14 @@ namespace TeacherAPI.patches
                     .Select(n => n.activity.room.RandomEntitySafeCellNoGarbage())
                     .ToArray();
                 var i = teacherManager.controlledRng.Next(cells.Count());
-                __instance.Ec.SpawnNPC(prefab, cells[i].position);
+                try
+                {
+                    __instance.Ec.SpawnNPC(prefab, cells[i].position);
+                } catch (IndexOutOfRangeException e)
+                {
+                    TeacherPlugin.Log.LogError($"Can't spawn {EnumExtensions.GetExtendedName<Character>((int)prefab.Character)} because no notebooks have been assigned.");
+                    break;
+                }
             }
 
             foreach (var notebook in __instance.Ec.notebooks)
