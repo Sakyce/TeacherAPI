@@ -46,7 +46,7 @@ namespace TeacherAPI
             AddLabel("Open the config file to change values that requires restarts.", new Vector2(-6, 71), new Vector2(375, 40));
             AddToggle(EnableCustomWarningScreen, "Enable Custom Warning Screen", "Enable the custom Warning Screen text changed by TeacherAPI.");
             AddToggle(DebugMode, "Enable Debug Mode", "Some goodies to help for development");
-            AddToggle(DebugMode, "Disable Assisting Teachers", "Completely disables teachers assisting other teachers.");
+            AddToggle(DisableAssistingTeachers, "Disable Assisting Teachers", "Completely disables teachers assisting other teachers.");
         }
 
         private static void OnMenuInitialize(OptionsMenu optionsMenu)
@@ -72,7 +72,7 @@ namespace TeacherAPI
             );
             DisableAssistingTeachers = TeacherPlugin.Instance.Config.Bind(
                 "General",
-                "Disable Assisting Teachers",
+                "DisableAssistingTeachers",
                 false,
                 "Completely disables secondary teachers from appearing."
             );
