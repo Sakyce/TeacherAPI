@@ -3,7 +3,7 @@
 
 Please don't publish the mods you have made with the API as long as TeacherAPI 0.1.0 is not released on GameBanana.
 
-Right now, there is no official builds of Teacher Extensions on Gamebanana. Although, you can find preview builds on the [Discord](https://discord.gg/75ykaFd6sB).
+Right now, there is no official builds of Teacher Extensions (Foxo, Null, Viktor, Alice) on Gamebanana. Although, you can find preview builds on the [Discord](https://discord.gg/75ykaFd6sB).
 
 ## Installation Tutorial
 Using NuGet, add your package in your csproj. Right click on Dependencies > Manage NuGet Packages and install the last version.
