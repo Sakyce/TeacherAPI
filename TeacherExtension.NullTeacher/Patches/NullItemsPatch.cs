@@ -11,9 +11,9 @@ namespace NullTeacher.Patches
             if (__result)
             {
                 pm.ec.MakeNoise(pm.transform.position, 127);
-                BaseGameManager.Instance.AngerBaldi(50f);
                 foreach (var teacher in TeacherManager.Instance.GetTeachersOfType<NullTeacher>())
                 {
+                    teacher.GetAngry(50f);
                     teacher.SpeechCheck(NullPhrase.Enough, 0.33f);
                 }
             }

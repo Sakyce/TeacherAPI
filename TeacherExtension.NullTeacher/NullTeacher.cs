@@ -92,11 +92,13 @@ namespace NullTeacher
             ec.standardDarkLevel = new Color(0.15f, 0.025f, 0.15f);
             ec.FlickerLights(false); // Doing this will update the lights
 
-            foreach (var activity in ec.activities)
+            if (!IsHelping())
             {
-                activity.Corrupt(true);
+                foreach (var activity in ec.activities)
+                {
+                    activity.Corrupt(true);
+                }
             }
-
             spriteBase.SetActive(false);
         }
         public override TeacherState GetAngryState() => new Null_Chase(this);
