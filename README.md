@@ -1,11 +1,7 @@
 # TeacherAPI
 ## Create your own Teacher for Baldi!
 
-
-
 Please don't publish the mods you have made with the API as long as TeacherAPI 0.1.0 is not released on GameBanana.
-
-# TeacherAPI
 
 ## Installation Tutorial
 Using NuGet, add your package in your csproj. Right click on Dependencies > Manage NuGet Packages and install the last version.
