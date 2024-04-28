@@ -49,6 +49,11 @@ namespace TeacherAPI.utils
             logger.LogInfo("}");
         }
 
+        public static void PrintWeights<T>(this IEnumerable<WeightedSelection<T>> w, string label, ManualLogSource logger)
+        {
+            w.Select(x => $"{x.selection} {x.weight}").Print(label, logger);
+        }
+
         /// <summary>
         /// Used internally for debugging purposes, dont use it in production.
         /// </summary>
