@@ -15,6 +15,7 @@ namespace TeacherAPI
         public static ConfigEntry<bool> EnableCustomWarningScreen  { get; internal set; }
         public static ConfigEntry<bool> DisableAssetsWarningScreen { get; internal set; }
         public static ConfigEntry<bool> DebugMode { get; internal set; }
+        public static ConfigEntry<bool> DisableAssistingTeachers { get; internal set; }
 
         private int i = 0;
         private OptionsMenu optionsMenu;
@@ -45,6 +46,7 @@ namespace TeacherAPI
             AddLabel("Open the config file to change values that requires restarts.", new Vector2(-6, 71), new Vector2(375, 40));
             AddToggle(EnableCustomWarningScreen, "Enable Custom Warning Screen", "Enable the custom Warning Screen text changed by TeacherAPI.");
             AddToggle(DebugMode, "Enable Debug Mode", "Some goodies to help for development");
+            AddToggle(DebugMode, "Disable Assisting Teachers", "Completely disables teachers assisting other teachers.");
         }
 
         private static void OnMenuInitialize(OptionsMenu optionsMenu)
@@ -59,14 +61,20 @@ namespace TeacherAPI
             EnableBaldi = TeacherPlugin.Instance.Config.Bind(
                 "General",
                 "EnableBaldi",
-                true,
-                "Set the weight of Baldi to 0 in the generator for every floor. That's cool if you want to only play with the Teachers you installed."
+                false,
+                "Doesn't works yet."
             );
             EnableCustomWarningScreen = TeacherPlugin.Instance.Config.Bind(
                 "General",
                 "EnableCustomWarningScreen",
                 true,
                 "The Warning Screen text at the start of the game is changed by TeacherAPI, doesn't affect the Warning Screen patch."
+            );
+            DisableAssistingTeachers = TeacherPlugin.Instance.Config.Bind(
+                "General",
+                "Disable Assisting Teachers",
+                false,
+                "Completely disables secondary teachers from appearing."
             );
             DisableAssetsWarningScreen = TeacherPlugin.Instance.Config.Bind(
                 "Dangerous",

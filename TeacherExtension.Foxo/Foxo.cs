@@ -117,7 +117,7 @@ namespace TeacherExtension.Foxo
         public override TeacherState GetHappyState() => forceWrath ? (Foxo_StateBase)(new Foxo_WrathHappy(this)) : new Foxo_Happy(this);
         public override string GetNotebooksText(string amount) => $"{amount} Foxo Comics";
         public override WeightedTeacherNotebook GetTeacherNotebookWeight()
-            => new WeightedTeacherNotebook(this).Weight(80).Sprite(sprites.Get<Sprite[]>("Notebook"));
+            => new WeightedTeacherNotebook(this).Weight(100).Sprite(sprites.Get<Sprite[]>("Notebook"));
         // Only play visual/audio effects, doesn't actually moves
         public new void SlapNormal()
         {

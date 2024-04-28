@@ -65,7 +65,6 @@ namespace TeacherAPI
             var randomTeacher = WeightedTeacherNotebook.GetRandom(teacherPool.ToArray(), teacherMan.controlledRng);
             character = randomTeacher.selection.Character;
             sprites = randomTeacher.sprites;
-            print($"Selected {randomTeacher.selection.name} for {EnumExtensions.GetExtendedName<Character>((int)character)}");
 
             var notebook = gameObject.GetComponent<Notebook>();
             if (randomTeacher.sprites != null)
@@ -128,11 +127,12 @@ namespace TeacherAPI
                 {
                     teacherMan.CurrentTeachersNotebooks.TryGetValue(teacher.Character, out int currentNotebooks);
                     teacherMan.MaxTeachersNotebooks.TryGetValue(teacher.Character, out int maxNotebooks);
+                    if (maxNotebooks == 0 && currentNotebooks == 0) continue;
                     notebookText = notebookText + teacher.GetNotebooksText(
                             $"{currentNotebooks}/{maxNotebooks}"
                     ) + '\n';
                 }
-                CoreGameManager.Instance.GetHud(0).gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(500, 200);
+                CoreGameManager.Instance.GetHud(0).gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(800, 200);
                 CoreGameManager.Instance.GetHud(0).UpdateText(0, notebookText);
             }
         }

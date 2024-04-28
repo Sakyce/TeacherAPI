@@ -68,8 +68,14 @@ namespace TeacherAPI
                 MTM101BaldiDevAPI.CauseCrash(Info, new Exception("There is no exactly one PotentialBaldi for this level. What mod did you have installed ?"));
             }
 
-            potentialTeachers.Add(floorObject, new List<WeightedSelection<Teacher>>());
-            potentialAssistants.Add(floorObject, new List<WeightedSelection<Teacher>>());
+            if (!potentialTeachers.ContainsKey(floorObject))
+            {
+                potentialTeachers.Add(floorObject, new List<WeightedSelection<Teacher>>());
+            }
+            if (!potentialAssistants.ContainsKey(floorObject))
+            {
+                potentialAssistants.Add(floorObject, new List<WeightedSelection<Teacher>>());
+            }
 
             if (!TeacherAPIConfiguration.EnableBaldi.Value)
             {
