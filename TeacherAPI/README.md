@@ -64,5 +64,5 @@ UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
 
 If you don't have Github, you can report it in the appropriate channel in the [Official Discord Guild](https://discord.gg/75ykaFd6sB), still do the same steps as mentionned earlier or Baldi will get angry.
 
-> [!CAUTION]
-> Your report can still be rejected if it badly follows the instructions. And it will result in moderation actions!
+> [!NOTE]
+> Your report on Discord can still be rejected if it badly follows the instructions. We will link you to this page as a warning.
