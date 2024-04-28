@@ -1,6 +1,8 @@
 # TeacherAPI
 ## Create your own Teacher for Baldi!
 
+
+
 Please don't publish the mods you have made with the API as long as TeacherAPI 0.1.0 is not released on GameBanana.
 
 # TeacherAPI
@@ -16,6 +18,14 @@ You can also add this as a PackageReference if you can't figure it out in your c
 ```
 
 If you want to already start with something, you can fork this [Example Teacher](https://github.com/Sakyce/TeacherExample) and create your own Teacher from it. (Very recommended!)
+
+## Good practices
+* Include options to disable your teacher as main, and disable your teacher as assistant, as well as tweaking weights.
+* Only make your teacher an assistant if you have tested it and made sure it's at least compatible with most teachers provided by the mod.
+* Separate your teacher dll from other features in your mod to be friendly with modpacks.
+
+## Contributing
+Send help... please.
 
 ## Reporting issues
 
