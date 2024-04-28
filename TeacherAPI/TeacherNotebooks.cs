@@ -59,17 +59,12 @@ namespace TeacherAPI
                 .Select(t => t.GetTeacherNotebookWeight())
                 .AddItem(teacherMan.MainTeacherPrefab.GetTeacherNotebookWeight());
 
-            teacherPool
-                .Select(t => $"{t.selection} {t.weight}")
-                .Print("Teacher weight Notebooks", TeacherPlugin.Log);
-
             teacherMan.MaxTeachersNotebooks.TryGetValue(teacherMan.MainTeacherPrefab.Character, out int mainTeacherMaxNotebooks);
             
             // The first TeacherNotebook to initialize will always be for the main teacher (or else softlock)
             var randomTeacher = mainTeacherMaxNotebooks <= 0
                 ? teacherMan.MainTeacherPrefab.GetTeacherNotebookWeight()
                 : WeightedTeacherNotebook.GetRandom(teacherPool.ToArray(), teacherMan.controlledRng);
-            Debug.Log($"Notebook assigned to {EnumExtensions.GetExtendedName<Character>((int) randomTeacher.selection.Character)}");
             character = randomTeacher.selection.Character;
             sprites = randomTeacher.sprites;
 

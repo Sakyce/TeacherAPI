@@ -21,6 +21,7 @@ namespace TeacherAPI
         public bool disableNpcs = false;
 
         public virtual AssistantPolicy GetAssistantPolicy() => new AssistantPolicy(PossibleAssistantAllowType.Deny);
+
         internal bool HasInitialized { get; set; }
         private TeacherManager teacherManager;
         public TeacherManager TeacherManager { get => teacherManager; }
@@ -65,7 +66,7 @@ namespace TeacherAPI
             Singleton<CoreGameManager>.Instance.GetCamera(0).offestPos += caughtOffset;
         }
 
-        [Obsolete("Use TeacherState.NotebookCollected(int currentNotebooks, int maxNotebooks) instead.")]
+        [Obsolete("Will be removed in 0.1.0. Use TeacherState.NotebookCollected(int currentNotebooks, int maxNotebooks) instead.")]
         public virtual void OnAllNotebooksCollected()
         {
 

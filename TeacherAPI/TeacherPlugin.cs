@@ -26,11 +26,11 @@ namespace TeacherAPI
 
         internal Dictionary<Character, NPC> whoAreTeachers = new Dictionary<Character, NPC>(); // Mostly used to differenciate who are teachers and who are not.
         internal Dictionary<LevelObject, Baldi> originalBaldiPerFloor = new Dictionary<LevelObject, Baldi>();
-        public Baldi currentBaldi;
+        public Baldi currentBaldi { get; internal set; }
 
-        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachers = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
-        public Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialAssistants = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
-        public Dictionary<LevelObject, int> floorNumbers = new Dictionary<LevelObject, int>();
+        internal Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachers = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
+        internal Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialAssistants = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
+        internal Dictionary<LevelObject, int> floorNumbers = new Dictionary<LevelObject, int>();
         public static ManualLogSource Log { get => Instance.Logger; }
 
         internal void Awake()
