@@ -56,7 +56,11 @@ MTM101BaldAPI.<ReloadScenes>d__19:MoveNext()
 UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)
 ```
 
-5. If you don't follow these steps correctly, your issue will be closed as not completed without any explaination.
+5. **Explain us how to reproduce the steps, what do you see, what it's supposed to happen.**
+> [!TIP]  
+> Spare us the work of searching which mod is incompatible by removing every mods, then add mods one by one until it breaks.
+ 
+6. If you don't follow these steps correctly, your issue will be closed as not completed without any explaination.
 
 If you don't have Github, you can report it in the appropriate channel in the [Official Discord Guild](https://discord.gg/75ykaFd6sB), still do the same steps as mentionned earlier or Baldi will get angry.
 
