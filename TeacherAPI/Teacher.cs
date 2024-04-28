@@ -20,6 +20,7 @@ namespace TeacherAPI
         /// </summary>
         public bool disableNpcs = false;
 
+        public virtual AssistantPolicy GetAssistantPolicy() => new AssistantPolicy(PossibleAssistantAllowType.Deny);
         internal bool HasInitialized { get; set; }
         private TeacherManager teacherManager;
         public TeacherManager TeacherManager { get => teacherManager; }

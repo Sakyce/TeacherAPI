@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using MTM101BaldAPI;
 using System.Collections;
+using System.Diagnostics;
 using System.Linq;
 using TeacherAPI.utils;
+using UnityEngine.Assertions;
 
 namespace TeacherAPI.patches
 {
@@ -30,16 +32,27 @@ namespace TeacherAPI.patches
 
                 var mainTeacher = WeightedSelection<Teacher>.ControlledRandomSelectionList(TeacherPlugin.Instance.potentialTeachers[__instance.ld], rng);
                 man.MainTeacherPrefab = mainTeacher;
+                TeacherPlugin.Instance.potentialTeachers[__instance.ld].PrintWeights("Potential Teachers", TeacherPlugin.Log);
                 TeacherPlugin.Log.LogInfo($"Selected Main Teacher {EnumExtensions.GetExtendedName<Character>((int)mainTeacher.character)}");
 
+                // Assistants setup
+                var policy = mainTeacher.GetAssistantPolicy();
                 var potentialAssistants = TeacherPlugin.Instance.potentialAssistants[__instance.ld]
                     .Where(t => t.selection != man.MainTeacherPrefab)
-                    .ToArray();
-                if (potentialAssistants.Length > 0 && !TeacherAPIConfiguration.DisableAssistingTeachers.Value)
+                    .Where(t => policy.CheckAssistant(t.selection))
+                    .ToList();
+
+                potentialAssistants.PrintWeights("Potential Assistants", TeacherPlugin.Log);
+
+                for (var x = 0; x < policy.maxAssistants; x++)
                 {
-                    var assistant = WeightedSelection<Teacher>.ControlledRandomSelection(potentialAssistants, rng);
-                    man.assistingTeachersPrefabs.Add(assistant);
-                    TeacherPlugin.Log.LogInfo($"Selected Teacher {EnumExtensions.GetExtendedName<Character>((int)assistant.character)}");
+                    if (potentialAssistants.Count > 0 && rng.NextDouble() <= policy.probability && !TeacherAPIConfiguration.DisableAssistingTeachers.Value)
+                    {
+                        var i = WeightedSelection<Teacher>.ControlledRandomIndex(potentialAssistants.ToArray(), rng);
+                        TeacherPlugin.Log.LogInfo($"Selected Teacher {EnumExtensions.GetExtendedName<Character>((int)potentialAssistants[i].selection.character)}");
+                        man.assistingTeachersPrefabs.Add(potentialAssistants[i].selection);
+                        potentialAssistants.Remove(potentialAssistants[i]);
+                    }
                 }
 
                 __instance.ld.potentialBaldis = new WeightedNPC[] { }; // Don't put anything in EC.NPCS, only secondary teachers can be there.
