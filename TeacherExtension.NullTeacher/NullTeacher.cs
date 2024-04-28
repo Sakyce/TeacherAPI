@@ -300,10 +300,9 @@ namespace NullTeacher
             base.DestinationEmpty();
             ohno.UpdateSoundTarget();
         }
-
-        public override void NotebookCollected()
+        public override void NotebookCollected(int currentNotebooks, int maxNotebooks)
         {
-            base.NotebookCollected();
+            base.NotebookCollected(currentNotebooks, maxNotebooks);
             ohno.Hear(CoreGameManager.Instance.GetPlayer(0).transform.position, 127, true);
         }
 
@@ -322,9 +321,9 @@ namespace NullTeacher
             ohno.ReplaceMusic(NullAssets.ambient);
         }
 
-        public override void NotebookCollected()
+        public override void NotebookCollected(int currentNotebooks, int maxNotebooks)
         {
-            base.NotebookCollected();
+            base.NotebookCollected(currentNotebooks, maxNotebooks);
             ohno.behaviorStateMachine.ChangeState(new Null_Chase(ohno));
             ohno.ActivateSpoopMode();
         }
