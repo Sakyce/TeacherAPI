@@ -38,7 +38,7 @@ Enabled = true
 
 3. Attach a screenshot of the plugins folder like this: ![image](https://github.com/Sakyce/TeacherAPI/assets/55030860/874de35e-e3c1-424a-9d3f-06e1de870214)
 
-4. Attach the LogOutput file from `BepInEx/LogOutput.log`. If you think the issue is from somewhere else, avoid posting first. Make that an error like this will actually appear in the file: (please note that the error doesn't come from TeacherAPI or its associated mods in this example). Don't send a screenshot of the 
+4. Attach the LogOutput file from `BepInEx/LogOutput.log`. If you think the issue is from somewhere else, avoid posting first. Make sure that an error like this will actually appear in the file: (please note that the error doesn't come from TeacherAPI or its associated mods in this example). **Don't send any screenshot, send the file directly!** 
 ```
 [Error  : Unity Log] ArgumentException: The Object you want to instantiate is null.
 Stack trace:
