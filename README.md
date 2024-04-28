@@ -23,8 +23,8 @@ If you want to already start with something, you can fork this [Example Teacher]
 > Try to reproduce the error without the others mods installed to make sure that it is caused by TeacherAPI and not an unrelated mod! We don't want to debug your big modpack.
 
 > [!WARNING]  
-> We don't provide support for poor compatibility with proprietary/closed-source/poorly coded mods like Sugaku Modpack.
-> We also don't provide support for outdated mods or mods marked as imcompatible.
+> We don't provide compatibility support with unstable/proprietary/closed-source/poorly coded mods like Sugaku Modpack or Level Editor.
+> We also don't provide support for outdated mods or mods marked as hardly imcompatible.
 
 If you have a Github Account, report the issue as usual. Although, we require you to do these steps first:
 
