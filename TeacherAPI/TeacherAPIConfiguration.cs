@@ -44,8 +44,8 @@ namespace TeacherAPI
         {
             this.optionsMenu = optionsMenu;
             AddLabel("Open the config file to change values that requires restarts.", new Vector2(-6, 71), new Vector2(375, 40));
-            AddToggle(EnableCustomWarningScreen, "Enable Custom Warning Screen", "Enable the custom Warning Screen text changed by TeacherAPI.");
             AddToggle(DebugMode, "Enable Debug Mode", "Some goodies to help for development");
+            AddToggle(EnableCustomWarningScreen, "Custom Warning Screen", "Enable the custom Warning Screen text changed by TeacherAPI.");
             AddToggle(DisableAssistingTeachers, "Disable Assisting Teachers", "Completely disables teachers assisting other teachers.");
         }
 
