@@ -21,6 +21,11 @@ namespace TeacherAPI.utils
             return textures.Select(x => AssetLoader.SpriteFromTexture2D(x, pixelsPerUnit)).ToArray();
         }
 
+        public static Sprite ToSprite(this Texture2D texture, float pixelsPerUnit)
+        {
+            return AssetLoader.SpriteFromTexture2D(texture, pixelsPerUnit);
+        }
+
         /// <summary>
         /// Used internally for debugging purposes, dont use it in production.
         /// </summary>
