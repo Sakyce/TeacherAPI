@@ -37,30 +37,16 @@ namespace TeacherAPI
         {
             Instance = this;
             TeacherAPIConfiguration.Setup();
-            //            foreach (var plugin in Chainloader.PluginInfos)
-            //            {
-            //                if (plugin.Value.Metadata.GUID == "mtm101.rulerp.bbplus.baldidevapi" && plugin.Value.Metadata.Version <= new Version("3.6.0.0"))
-            //                {
-            //                    ShowWarningScreen($@"
-            //The mod <color=blue>TeacherAPI</color> requires a more recent version of <color=red>Baldi Dev API</color>!</color>
+            if (!TeacherAPIConfiguration.DebugMode.Value)
+            {
+                MTM101BaldiDevAPI.AddWarningScreen(@"<color=blue>TeacherAPI</color> is still a <color=yellow>prototype</color> and you will see unexpected things!</color>
 
-            //The current version you have is <color=yellow>{plugin.Value.Metadata.Version}</color> and the required version is <color=green>4.0.0.0</color>
-
-
-            //<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
-            //");
-            //                    break;
-            //                }
-            //            }
+Please read the instructions to report any bugs in the mod page!
+If you encounter an error, send me the Logs!", false);
+            }
             new Harmony("sakyce.baldiplus.teacherapi").PatchAllConditionals();
             GeneratorManagement.Register(this, GenerationModType.Base, EditGenerator);
-
-            // Remove this when a more recent version of Dev API release
-            if (TeacherAPIConfiguration.DebugMode.Value)
-            {
-                SceneManager.LoadScene("MainMenu");
             }
-        }
         private void EditGenerator(string floorName, int floorNumber, LevelObject floorObject)
         {
             if (floorObject.potentialBaldis.Length != 1)
@@ -132,20 +118,11 @@ namespace TeacherAPI
             string assetsPath = AssetLoader.GetModPath(plug);
             if (!Directory.Exists(assetsPath))
             {
-                WarningScreenCustomText.ShowWarningScreen(String.Format(@"
+                MTM101BaldiDevAPI.AddWarningScreen(String.Format(@"
 The mod <color=blue>{0}</color> must have the assets file in <color=red>StreamingAssets/Modded</color>!</color>
 
-The name of the assets folder must be <color=red>{1}</color>.
-
-
-<alpha=#AA>PRESS ALT + F4 TO CLOSE THIS GAME
-", Path.GetFileName(plug.Info.Location), plug.Info.Metadata.GUID));
-            }
+The name of the assets folder must be <color=red>{1}</color>.", Path.GetFileName(plug.Info.Location), plug.Info.Metadata.GUID), true);
         }
-
-        public static void ShowWarningScreen(string text)
-        {
-            WarningScreenCustomText.ShowWarningScreen(text);
         }
 
         /// <summary>
