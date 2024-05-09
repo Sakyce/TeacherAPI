@@ -16,7 +16,7 @@ namespace TeacherAPI.patches
             var seed = CoreGameManager.Instance.Seed();
             var man = __instance.ec.gameObject.AddComponent<TeacherManager>();
             man.Initialize(__instance.ec, seed);
-            TeacherPlugin.Instance.currentBaldi = TeacherPlugin.Instance.GetPotentialBaldi(__instance.ld);
+            TeacherPlugin.Instance.CurrentBaldi = TeacherPlugin.Instance.GetPotentialBaldi(__instance.ld);
 
             object itemAction(object obj)
             {

@@ -9,7 +9,7 @@ namespace TeacherAPI.patches
     [HarmonyPriority(Priority.First)]
     internal class GetBaldiPatch
     {
-        public static void Postfix(EnvironmentController __instance, ref Baldi __result)
+        public static void Postfix(ref Baldi __result)
         {
             if (__result == null && TeacherManager.Instance.SpawnedMainTeacher != null)
             {

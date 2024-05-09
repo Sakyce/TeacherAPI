@@ -26,7 +26,7 @@ namespace TeacherAPI
 
         internal Dictionary<Character, NPC> whoAreTeachers = new Dictionary<Character, NPC>(); // Mostly used to differenciate who are teachers and who are not.
         internal Dictionary<LevelObject, Baldi> originalBaldiPerFloor = new Dictionary<LevelObject, Baldi>();
-        public Baldi currentBaldi { get; internal set; }
+        public Baldi CurrentBaldi { get; internal set; }
 
         internal Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialTeachers = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
         internal Dictionary<LevelObject, List<WeightedSelection<Teacher>>> potentialAssistants = new Dictionary<LevelObject, List<WeightedSelection<Teacher>>>();
@@ -46,7 +46,7 @@ If you encounter an error, send me the Logs!", false);
             }
             new Harmony("sakyce.baldiplus.teacherapi").PatchAllConditionals();
             GeneratorManagement.Register(this, GenerationModType.Base, EditGenerator);
-            }
+        }
         private void EditGenerator(string floorName, int floorNumber, LevelObject floorObject)
         {
             if (floorObject.potentialBaldis.Length != 1)
@@ -122,7 +122,7 @@ If you encounter an error, send me the Logs!", false);
 The mod <color=blue>{0}</color> must have the assets file in <color=red>StreamingAssets/Modded</color>!</color>
 
 The name of the assets folder must be <color=red>{1}</color>.", Path.GetFileName(plug.Info.Location), plug.Info.Metadata.GUID), true);
-        }
+            }
         }
 
         /// <summary>

@@ -377,7 +377,7 @@ namespace TeacherExtension.Foxo
             // 6 Lines of code for a sound effect 💀
             if (!isBroken)
             {
-                foxo.AudMan.PlaySingle(TeacherPlugin.Instance.currentBaldi.rulerBreak);
+                foxo.AudMan.PlaySingle(TeacherPlugin.Instance.CurrentBaldi.rulerBreak);
                 isBroken = true;
             }
             foxo.SlapBroken();
