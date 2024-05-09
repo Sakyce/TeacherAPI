@@ -66,12 +66,6 @@ namespace TeacherAPI
             Singleton<CoreGameManager>.Instance.GetCamera(0).offestPos += caughtOffset;
         }
 
-        [Obsolete("Will be removed in 0.1.0. Use TeacherState.NotebookCollected(int currentNotebooks, int maxNotebooks) instead.")]
-        public virtual void OnAllNotebooksCollected()
-        {
-
-        }
-
         /// <summary>
         /// The state of the teacher when he goes angry. 
         /// Only used when your Teacher is being spawned during SpoopMode.
