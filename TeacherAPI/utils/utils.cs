@@ -10,17 +10,6 @@ namespace TeacherAPI.utils
 {
     public static class Extensions
     {
-        /// <summary>
-        /// Convert the textures into an array of sprites
-        /// </summary>
-        /// <param name="textures"></param>
-        /// <param name="pixelsPerUnit"></param>
-        /// <returns></returns>
-        public static Sprite[] ToSprites(this Texture2D[] textures, float pixelsPerUnit)
-        {
-            return textures.Select(x => AssetLoader.SpriteFromTexture2D(x, pixelsPerUnit)).ToArray();
-        }
-
         public static Sprite ToSprite(this Texture2D texture, float pixelsPerUnit)
         {
             return AssetLoader.SpriteFromTexture2D(texture, pixelsPerUnit);

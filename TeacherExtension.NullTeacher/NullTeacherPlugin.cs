@@ -1,9 +1,12 @@
 ﻿using BepInEx;
 using HarmonyLib;
 using MTM101BaldAPI;
+using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
+using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using TeacherAPI;
+using UnityEngine;
 using static BepInEx.BepInDependency;
 
 namespace NullTeacher
@@ -22,25 +25,28 @@ namespace NullTeacher
             Instance = this;
             TeacherPlugin.RequiresAssetsFolder(this); // Very important, or else people will complain about Beans!
             NullConfiguration.Setup();
-            LoadingEvents.RegisterOnAssetsLoaded(OnassetsLoaded, false);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, OnassetsLoaded, false);
         }
 
         private void OnassetsLoaded()
         {
             NullAssets.Load();
-            var teacher = ObjectCreators.CreateNPC<NullTeacher>(
-                "NullTeacher",
-                EnumExtensions.ExtendEnum<Character>("NullTeacher"),
-                ObjectCreators.CreatePosterObject(new UnityEngine.Texture2D[] { NullAssets.poster }),
-                maxAudioDistance: 1000
-            );
+            var teacher = new NPCBuilder<NullTeacher>(Info)
+                .SetName("NullTeacher")
+                .SetEnum("NullTeacher")
+                .SetPoster(ObjectCreators.CreatePosterObject(new UnityEngine.Texture2D[] { NullAssets.poster }))
+                .AddLooker()
+                .AddTrigger()
+                .AddMetaFlag(NPCFlags.CanHear)
+                .SetMinMaxAudioDistance(0, 1000)
+                .SetMetaTags(new string[] { "Teacher" })
+                .Build();
             teacher.audMan = teacher.GetComponent<AudioManager>();
 
             CustomSpriteAnimator animator = teacher.gameObject.AddComponent<CustomSpriteAnimator>();
             animator.spriteRenderer = teacher.spriteRenderer[0];
             teacher.animator = animator;
 
-            NPCMetaStorage.Instance.Add(new NPCMetadata(Info, new NPC[] { teacher }, "NullTeacher", NPCFlags.StandardAndHear));
             TeacherPlugin.RegisterTeacher(teacher);
             NullTeacher = teacher;
 

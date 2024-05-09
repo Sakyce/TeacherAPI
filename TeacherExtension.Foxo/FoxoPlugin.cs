@@ -3,6 +3,7 @@ using HarmonyLib;
 using MTM101BaldAPI;
 using MTM101BaldAPI.AssetTools;
 using MTM101BaldAPI.Components;
+using MTM101BaldAPI.ObjectCreation;
 using MTM101BaldAPI.Registers;
 using System.Linq;
 using TeacherAPI;
@@ -26,24 +27,25 @@ namespace TeacherExtension.Foxo
             Instance = this;
             FoxoConfiguration.Setup();
             TeacherPlugin.RequiresAssetsFolder(this); // Critical!!!
-            LoadingEvents.RegisterOnAssetsLoaded(OnAssetsLoaded, false);
+            LoadingEvents.RegisterOnAssetsLoaded(Info, OnAssetsLoaded, false);
         }
 
         private Foxo NewFoxo(string name)
         {
-            var newFoxo = ObjectCreators.CreateNPC<Foxo>(
-                name,
-                EnumExtensions.ExtendEnum<Character>(name),
-                ObjectCreators.CreatePosterObject(new Texture2D[] { AssetLoader.TextureFromMod(this, "poster.png") })
-            );
+            var newFoxo = new NPCBuilder<Foxo>(Info)
+                .SetName(name)
+                .SetEnum(name)
+                .SetPoster(ObjectCreators.CreatePosterObject(new Texture2D[] { AssetLoader.TextureFromMod(this, "poster.png") }))
+                .AddLooker()
+                .AddTrigger()
+                .SetMetaTags(new string[] { "Teacher" })
+                .Build();
             newFoxo.audMan = newFoxo.GetComponent<AudioManager>();
 
             // Adds a custom animator
             CustomSpriteAnimator animator = newFoxo.gameObject.AddComponent<CustomSpriteAnimator>();
             animator.spriteRenderer = newFoxo.spriteRenderer[0];
             newFoxo.animator = animator;
-
-            NPCMetaStorage.Instance.Add(new NPCMetadata(Info, new NPC[] { newFoxo }, name, NPCFlags.Standard));
             return newFoxo;
         }
 

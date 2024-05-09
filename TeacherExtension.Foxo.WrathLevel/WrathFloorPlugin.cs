@@ -112,7 +112,7 @@ namespace TeacherExtension.Foxo
             // For safety, only edit the SceneObjects when Infinite Floors is not loaded.
             if (!TeacherPlugin.IsEndlessFloorsLoaded())
             {
-                LoadingEvents.RegisterOnAssetsLoaded(AddWrathLevel, false);
+                LoadingEvents.RegisterOnAssetsLoaded(Info, AddWrathLevel, false);
             }
 
             // Finalizer BECAUSE he is supposed to be a boss, must have the final say from all the other mods.
