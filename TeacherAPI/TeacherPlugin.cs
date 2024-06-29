@@ -86,6 +86,7 @@ If you encounter an error, send me the Logs!", false);
         {
             if (floorObject.potentialBaldis.Count() <= 0)
             {
+                Log.LogWarning("potentialBaldis in " + floorObject.name + "is blank!");
                 return originalBaldiPerFloor[floorObject];
             }
             var baldis = (from x in floorObject.potentialBaldis
@@ -94,7 +95,12 @@ If you encounter an error, send me the Logs!", false);
             if (baldis.Length > 1)
             {
                 (from baldi in baldis select baldi.name).Print("Baldis", TeacherPlugin.Log);
-                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("Multiple Baldis found in the level!"));
+                MTM101BaldiDevAPI.CauseCrash(Info, new Exception("Multiple Baldis found in " + floorObject.name + "!"));
+            }
+            else if (baldis.Length <= 0)
+            {
+                Log.LogWarning("No Baldi found in " + floorObject.name + "!");
+                return null;
             }
             return baldis.First();
         }

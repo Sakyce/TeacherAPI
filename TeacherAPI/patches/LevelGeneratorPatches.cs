@@ -21,7 +21,7 @@ namespace TeacherAPI.patches
             object itemAction(object obj)
             {
                 if (man.MainTeacherPrefab != null) return obj;
-                if (TeacherPlugin.Instance.potentialTeachers[__instance.ld].Count <= 0)
+                if (TeacherPlugin.Instance.potentialTeachers[__instance.ld].Count <= 0 || TeacherPlugin.Instance.originalBaldiPerFloor[__instance.ld] == null)
                 {
                     TeacherManager.DefaultBaldiEnabled = true;
                     return obj;
@@ -62,7 +62,7 @@ namespace TeacherAPI.patches
 
             void postfix()
             {
-                if (TeacherManager.DefaultBaldiEnabled) return;
+                if (TeacherManager.DefaultBaldiEnabled || TeacherPlugin.Instance.originalBaldiPerFloor[__instance.ld] == null) return;
                 var controlledRng = new System.Random(seed);
                 __instance.Ec.offices
                     .ForEach(office => __instance.Ec.BuildPosterInRoom(office, man.MainTeacherPrefab.Poster, controlledRng));
